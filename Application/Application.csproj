@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>$(SolutionName).$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Categories\CreateCategory\**" />
+    <Compile Remove="Categories\DeleteCategory\**" />
+    <Compile Remove="Categories\UpdateCategory\**" />
+    <EmbeddedResource Remove="Categories\CreateCategory\**" />
+    <EmbeddedResource Remove="Categories\DeleteCategory\**" />
+    <EmbeddedResource Remove="Categories\UpdateCategory\**" />
+    <None Remove="Categories\CreateCategory\**" />
+    <None Remove="Categories\DeleteCategory\**" />
+    <None Remove="Categories\UpdateCategory\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Categories\Commands\CreateCategory\" />
+    <Folder Include="Categories\Commands\DeleteCategory\" />
+    <Folder Include="Categories\Commands\UpdateCategory\" />
+    <Folder Include="Common\Exceptions\" />
+    <Folder Include="Common\Mappings\" />
+    <Folder Include="Common\Behaviours\" />
+    <Folder Include="Models\" />
+    <Folder Include="Profiles\Queries\GetProfilesList\" />
+    <Folder Include="Profiles\Queries\GetProfileDetail\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+</Project>
