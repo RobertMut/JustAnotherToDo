@@ -6,5 +6,5 @@ public class CreateProfileCommand : IRequest<Guid>
 {
     public string Name { get; set; }
     public string Color { get; set; }
-    public Guid UserId  { get; set; }
+    public Guid ProfileId  { get; set; }
 }

@@ -19,7 +19,7 @@ public class CreateProfileCommandHandler : IRequestHandler<CreateProfileCommand,
         {
             Name = request.Name,
             Color = request.Color,
-            UserId = request.UserId
+            ProfileId = request.ProfileId
         };
         _context.Categories.Add(entity);
         await _context.SaveChangesAsync(cancellationToken);

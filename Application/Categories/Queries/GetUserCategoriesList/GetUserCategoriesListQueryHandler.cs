@@ -27,6 +27,7 @@ public class GetUserCategoriesListQueryHandler : IRequestHandler<GetUserCategori
         {
             Categories = categories,
             ProfileId = request.ProfileId
+
         };
         return vm;
     }

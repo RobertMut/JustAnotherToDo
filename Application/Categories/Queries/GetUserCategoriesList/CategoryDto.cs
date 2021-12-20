@@ -13,6 +13,6 @@ public class CategoryDto : IMapFrom<Category>
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Category, UserCategoriesListVm>()
-            .ForMember(u => u.ProfileId, opt => opt.MapFrom(i => i.UserId));
+            .ForMember(u => u.ProfileId, opt => opt.MapFrom(i => i.ProfileId));
     }
 }

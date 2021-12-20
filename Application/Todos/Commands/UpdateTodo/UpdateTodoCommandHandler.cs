@@ -18,7 +18,7 @@ public class UpdateTodoCommandHandler : IRequestHandler<UpdateTodoCommand>
         var entity = await _context.ToDos.FindAsync(request.Id);
         if (entity == null) throw new NotFoundException(nameof(Todos), request.Id);
         entity.Name = request.Name;
-        entity.CategoryId = (Guid)request.CategoryId;
+        //entity.CategoryId = (Guid)request.CategoryId;
         entity.EndDate = request.EndTime;
         entity.Id = request.Id;
         await _context.SaveChangesAsync(cancellationToken);

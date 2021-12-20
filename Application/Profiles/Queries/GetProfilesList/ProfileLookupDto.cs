@@ -11,7 +11,6 @@ public class ProfileLookupDto
     public void Mapping(Profile profile)
     {
         profile.CreateMap<UserProfile, ProfileLookupDto>()
-            .ForMember(i => i.Id, opt => opt.MapFrom(o => o.Id))
-            .ForMember(n => n.Username, opt => opt.MapFrom())
+            .ForMember(i => i.Id, opt => opt.MapFrom(o => o.Id));
     }
 }

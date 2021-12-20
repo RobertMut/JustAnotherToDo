@@ -29,6 +29,7 @@
     <Folder Include="Models\" />
     <Folder Include="Profiles\Queries\GetProfilesList\" />
     <Folder Include="Profiles\Queries\GetProfileDetail\" />
+    <Folder Include="System\Commands\InitialData\" />
   </ItemGroup>
 
   <ItemGroup>
