@@ -12,7 +12,15 @@ public class ProfilesConfiguration : IEntityTypeConfiguration<UserProfile>
         builder.Property(e => e.Id).ValueGeneratedOnAdd();
         builder.Property(e => e.Username).IsRequired();
         builder.Property(e => e.Password).IsRequired();
-        builder.Property(e => e.Categories).IsRequired(false);
-
+        builder.HasMany(c => c.Categories)
+            .WithOne(c => c.Profile)
+            .HasForeignKey(fk => fk.ProfileId)
+            .OnDelete(DeleteBehavior.NoAction)
+            .HasConstraintName("FK_Categories_UserProfile_ProfileId");
+        builder.HasMany(t => t.ToDos)
+            .WithOne(u => u.Profile)
+            .HasForeignKey(fk => fk.ProfileId)
+            .OnDelete(DeleteBehavior.NoAction)
+            .HasForeignKey("FK_Todos_UserProfile_ProfileId");
     }
 }

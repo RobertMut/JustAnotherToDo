@@ -13,6 +13,11 @@ public class ToDosConfiguration : IEntityTypeConfiguration<ToDo>
         builder.Property(e => e.Name).IsRequired();
         builder.Property(e => e.CreationDate).IsRequired();
         builder.Property(e => e.EndDate).IsRequired(false);
-        builder.Property(e => e.Category).IsRequired(false);
+        builder.HasOne(c => c.Category)
+            .WithMany(t => t.ToDos)
+            .HasForeignKey(fk => fk.CategoryId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .HasConstraintName("FK_Categories_Todo_CategoryId");
     }
 }

@@ -9,7 +9,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     public void Configure(EntityTypeBuilder<Category> builder)
     {
         builder.HasKey(k => k.Id);
-        builder.Property(k => k.Name).ValueGeneratedOnAdd();
+        builder.Property(k => k.Id).ValueGeneratedOnAdd();
         builder.Property(e => e.Name).IsRequired();
     }
 }

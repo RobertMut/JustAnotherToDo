@@ -2,24 +2,26 @@ using IdentityServer4.Hosting;
 using JustAnotherToDo.Application;
 using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Infrastructure;
+using JustAnotherToDo.Infrastructure.Identity;
 using JustAnotherToDo.Persistence;
 using Microsoft.AspNetCore;
 using WebUI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-var webBuilder = WebHost.CreateDefaultBuilder(args);
-webBuilder.ConfigureAppConfiguration((hostingContext, config) =>
-{
-    var env = hostingContext.HostingEnvironment;
-    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-}).Build();
-
+//var webBuilder = WebHost.CreateDefaultBuilder(args);
+//webBuilder.ConfigureAppConfiguration((hostingContext, config) =>
+//{
+//    var env = hostingContext.HostingEnvironment;
+//    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+//        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+//}).Build();
+builder.WebHost.AddSerilog();
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddJsonFile($"appsettings.Local.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
+
 // Add services to the container.
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
@@ -30,6 +32,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson();
 var app = builder.Build();
+await app.Services.DatabaseInitializer<JustAnotherToDoDbContext, ApplicationDBContext>();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -38,7 +41,14 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHealthChecks("/health");
+app.UseCors(b =>
+{
+    b.AllowAnyOrigin();
+    b.AllowAnyMethod();
+    b.AllowAnyHeader();
+});
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
