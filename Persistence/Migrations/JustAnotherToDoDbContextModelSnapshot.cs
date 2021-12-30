@@ -41,8 +41,6 @@ namespace JustAnotherToDo.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfileId");
-
                     b.ToTable("Categories");
                 });
 
@@ -61,9 +59,6 @@ namespace JustAnotherToDo.Persistence.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("FK_Todos_UserProfile_ProfileId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -75,40 +70,7 @@ namespace JustAnotherToDo.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("FK_Todos_UserProfile_ProfileId");
-
                     b.ToTable("ToDos");
-                });
-
-            modelBuilder.Entity("JustAnotherToDo.Domain.Entities.UserProfile", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Profiles");
-                });
-
-            modelBuilder.Entity("JustAnotherToDo.Domain.Entities.Category", b =>
-                {
-                    b.HasOne("JustAnotherToDo.Domain.Entities.UserProfile", "Profile")
-                        .WithMany("Categories")
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_Categories_UserProfile_ProfileId");
-
-                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("JustAnotherToDo.Domain.Entities.ToDo", b =>
@@ -118,26 +80,11 @@ namespace JustAnotherToDo.Persistence.Migrations
                         .HasForeignKey("CategoryId")
                         .HasConstraintName("FK_Categories_Todo_CategoryId");
 
-                    b.HasOne("JustAnotherToDo.Domain.Entities.UserProfile", "Profile")
-                        .WithMany("ToDos")
-                        .HasForeignKey("FK_Todos_UserProfile_ProfileId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("Category");
-
-                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("JustAnotherToDo.Domain.Entities.Category", b =>
                 {
-                    b.Navigation("ToDos");
-                });
-
-            modelBuilder.Entity("JustAnotherToDo.Domain.Entities.UserProfile", b =>
-                {
-                    b.Navigation("Categories");
-
                     b.Navigation("ToDos");
                 });
 #pragma warning restore 612, 618

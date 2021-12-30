@@ -10,7 +10,7 @@ namespace JustAnotherToDo.Persistence
         public JustAnotherToDoDbContext(DbContextOptions options) : base(options)
         {
         }
-        public DbSet<UserProfile> Profiles  { get; set; }
+        //public DbSet<UserProfile> Profiles  { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ToDo> ToDos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -10,19 +10,6 @@ namespace JustAnotherToDo.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Profiles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Profiles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -34,11 +21,6 @@ namespace JustAnotherToDo.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Categories_UserProfile_ProfileId",
-                        column: x => x.ProfileId,
-                        principalTable: "Profiles",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -50,8 +32,7 @@ namespace JustAnotherToDo.Persistence.Migrations
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FK_Todos_UserProfile_ProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,27 +42,12 @@ namespace JustAnotherToDo.Persistence.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ToDos_Profiles_FK_Todos_UserProfile_ProfileId",
-                        column: x => x.FK_Todos_UserProfile_ProfileId,
-                        principalTable: "Profiles",
-                        principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_ProfileId",
-                table: "Categories",
-                column: "ProfileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ToDos_CategoryId",
                 table: "ToDos",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ToDos_FK_Todos_UserProfile_ProfileId",
-                table: "ToDos",
-                column: "FK_Todos_UserProfile_ProfileId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -91,9 +57,6 @@ namespace JustAnotherToDo.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "Profiles");
         }
     }
 }

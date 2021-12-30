@@ -1,40 +1,60 @@
-﻿using JustAnotherToDo.Application.Common.Interfaces;
+﻿using JustAnotherToDo.Application.Common.Exceptions;
+using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Application.Models;
+using JustAnotherToDo.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace JustAnotherToDo.Infrastructure.Identity
 {
     public class UserManagerService : IUserManager
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IApplicationDbContext _context;
 
-        public UserManagerService(UserManager<ApplicationUser> userManager)
+        public UserManagerService(IApplicationDbContext context)
         {
-            _userManager = userManager;
+            _context = context;
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+        public async Task<Guid> CreateUserAsync(string userName, string password, CancellationToken ct)
         {
-            var user = new ApplicationUser
+            var user = new UserProfile()
             {
-                UserName = userName,
-                Email = userName
+                Username = userName,
+                Password = password
             };
-            var result = await _userManager.CreateAsync(user, password);
-            return (result.ToApplicationResult(), user.Id);
+            var entity = await _context.Profiles.AddAsync(user, ct);
+            await _context.SaveChangesAsync(ct);
+            return entity.Entity.UserId;
         }
 
-        public async Task<Result> DeleteUserAsync(string userId)
+        public async Task<UserProfile> GetUserAsync(string userName)
         {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
-            if (user != null) return await DeleteUserAsync(user);
-            return Result.Success();
+            var result = await _context.Profiles.FirstOrDefaultAsync(c => c.Username == userName);
+            if (result == null) throw new NotFoundException(nameof(UserProfile), userName);
+            return result;
         }
 
-        public async Task<Result> DeleteUserAsync(ApplicationUser user)
+        public async Task<UserProfile> GetUserByIdAsync(Guid id)
         {
-            var result = await _userManager.DeleteAsync(user);
-            return result.ToApplicationResult();
+            var result = await _context.Profiles.FirstOrDefaultAsync(c => c.UserId == id);
+            if (result == null) throw new NotFoundException(nameof(UserProfile), id);
+            return result;
+        }
+
+        public async Task<Guid> UpdateProfileAsync(UserProfile profile, CancellationToken ct)
+        {
+            var result = _context.Profiles.Update(profile);
+            await _context.SaveChangesAsync(ct);
+            return result.Entity.UserId;
+        }
+
+        public async Task<Guid> DeleteUserAsync(Guid userId)
+        {
+            var result = await _context.Profiles.FirstOrDefaultAsync(c => c.UserId == userId);
+            if (result == null) throw new NotFoundException(nameof(UserProfile), userId);
+            var deleted = _context.Profiles.Remove(result);
+            return deleted.Entity.UserId;
         }
     }
 }
