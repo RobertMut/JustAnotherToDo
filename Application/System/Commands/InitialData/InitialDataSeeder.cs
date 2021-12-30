@@ -17,8 +17,8 @@ public class InitialDataSeeder
     public async Task SeedAsync(CancellationToken cancellationToken)
     {
         await SeedUser(cancellationToken);
-        //await SeedCategory(cancellationToken);
-        //await SeedTodo(cancellationToken);
+        await SeedCategory(cancellationToken);
+        await SeedTodo(cancellationToken);
     }
 
     public async Task SeedUser(CancellationToken cancellationToken)
@@ -28,35 +28,34 @@ public class InitialDataSeeder
             Username = "Administrator",
             Password = "1234",
         };
-        await _context.Profiles.AddAsync(user, cancellationToken);
+        await _manager.CreateUserAsync("Administrator", "1234", cancellationToken);
+    }
+
+    public async Task SeedCategory(CancellationToken cancellationToken)
+    {
+        var user = await _manager.GetUserAsync("Administrator");
+        var category = new Category
+        {
+            Name = "green",
+            Color = "#006400",
+            ProfileId = user.UserId
+        };
+        await _context.Categories.AddAsync(category, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    //public async Task SeedCategory(CancellationToken cancellationToken)
-    //{
-    //    var user = _context.Profiles.Single(u => u.Username == "Administrator");
-    //    var category = new Category
-    //    {
-    //        Name = "green",
-    //        Color = "#006400",
-    //        UserId = user.Id,
-    //    };
-    //    await _context.Categories.AddAsync(category, cancellationToken);
-    //    await _context.SaveChangesAsync(cancellationToken);
-    //}
-
-    //public async Task SeedTodo(CancellationToken cancellationToken)
-    //{
-    //    var user = _context.Profiles.Single(u => u.Username == "Administrator");
-    //    var category = _context.Categories.Single(c => c.Name == "green" && c.UserId == user.Id);
-    //    var todo = new ToDo
-    //    {
-    //        Name = "Test Todo",
-    //        CreationDate = DateTime.Now,
-    //        CategoryId = category.Id,
-    //        ProfileId = user.Id
-    //    };
-    //    await _context.ToDos.AddAsync(todo, cancellationToken);
-    //    await _context.SaveChangesAsync(cancellationToken);
-    //}
+    public async Task SeedTodo(CancellationToken cancellationToken)
+    {
+        var user = await _manager.GetUserAsync("Administrator");
+        var category = _context.Categories.Single(c => c.Name == "green" && c.ProfileId == user.UserId);
+        var todo = new ToDo
+        {
+            Name = "Test Todo",
+            CreationDate = DateTime.Now,
+            CategoryId = category.Id,
+            ProfileId = user.UserId
+        };
+        await _context.ToDos.AddAsync(todo, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

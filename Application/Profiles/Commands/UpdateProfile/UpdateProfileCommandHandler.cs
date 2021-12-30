@@ -1,26 +1,29 @@
 ﻿using JustAnotherToDo.Application.Common.Exceptions;
 using JustAnotherToDo.Application.Common.Interfaces;
+using JustAnotherToDo.Domain.Entities;
 using MediatR;
 
 namespace JustAnotherToDo.Application.Profiles.Commands.UpdateProfile;
 
-public class UpdateTodoCommandHandler : IRequestHandler<UpdateTodoCommand>
+public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
 {
-    private readonly IJustAnotherToDoDbContext _context;
+    private readonly IUserManager _manager;
 
-    public UpdateTodoCommandHandler(IJustAnotherToDoDbContext context)
+    public UpdateProfileCommandHandler(IUserManager manager)
     {
-        _context = context;
+        _manager = manager;
     }
 
-    public async Task<Unit> Handle(UpdateTodoCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Profiles.FindAsync(request.Id);
-        if (entity == null) throw new NotFoundException(nameof(Profiles), request.Id);
-        entity.Id = request.Id;
-        entity.Password = request.Password;
-        entity.Username = request.Name;
-        await _context.SaveChangesAsync(cancellationToken);
+        var entity = await _manager.GetUserByIdAsync(request.UserId);
+        if (entity == null) throw new NotFoundException(nameof(Profiles), request.UserId);
+        await _manager.UpdateProfileAsync(new UserProfile
+        {
+            UserId = entity.UserId,
+            Username = request.Name,
+            Password = request.Password
+        }, cancellationToken);
         return Unit.Value;
     }
 }

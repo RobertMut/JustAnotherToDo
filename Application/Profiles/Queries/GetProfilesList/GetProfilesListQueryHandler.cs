@@ -8,10 +8,10 @@ namespace JustAnotherToDo.Application.Profiles.Queries.GetProfilesList;
 
 public class GetProfilesListQueryHandler : IRequestHandler<GetProfilesListQuery, ProfilesListVm>
 {
-    private readonly IJustAnotherToDoDbContext _context;
+    private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetProfilesListQueryHandler(IJustAnotherToDoDbContext context, IMapper mapper)
+    public GetProfilesListQueryHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;

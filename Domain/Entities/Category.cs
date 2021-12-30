@@ -7,6 +7,6 @@
         public string Color { get; set; }
         public Guid ProfileId { get; set; }
         public IList<ToDo> ToDos { get; set; }
-        public UserProfile Profile { get; set; }
+        //public UserProfile Profile { get; set; }
     }
 }

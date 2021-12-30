@@ -4,16 +4,16 @@ using MediatR;
 
 namespace JustAnotherToDo.Application.Categories.Commands.CreateCategory;
 
-public class CreateProfileCommandHandler : IRequestHandler<CreateProfileCommand, Guid>
+public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Guid>
 {
     private readonly IJustAnotherToDoDbContext _context;
 
-    public CreateProfileCommandHandler(IJustAnotherToDoDbContext _context)
+    public CreateCategoryCommandHandler(IJustAnotherToDoDbContext _context)
     {
         this._context = _context;
     }
 
-    public async Task<Guid> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         var entity = new Category
         {

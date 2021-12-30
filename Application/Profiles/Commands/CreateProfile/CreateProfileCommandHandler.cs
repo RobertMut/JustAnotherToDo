@@ -4,24 +4,18 @@ using MediatR;
 
 namespace JustAnotherToDo.Application.Profiles.Commands.CreateProfile;
 
-public class CreateTodoCommandHandler : IRequestHandler<CreateTodoCommand, Guid>
+public class CreateProfileCommandHandler : IRequestHandler<CreateProfileCommand, Guid>
 {
-    private readonly IJustAnotherToDoDbContext _context;
+    private readonly IUserManager _manager;
 
-    public CreateTodoCommandHandler(IJustAnotherToDoDbContext _context)
+    public CreateProfileCommandHandler(IUserManager _manager)
     {
-        this._context = _context;
+        this._manager = _manager;
     }
 
-    public async Task<Guid> Handle(CreateTodoCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
     {
-        var entity = new UserProfile
-        {
-            Username = request.Username,
-            Password = request.Password
-        };
-        _context.Profiles.Add(entity);
-        await _context.SaveChangesAsync(cancellationToken);
-        return entity.Id;
+        var user = await _manager.CreateUserAsync(request.Username, request.Password, cancellationToken);
+        return user;
     }
 }

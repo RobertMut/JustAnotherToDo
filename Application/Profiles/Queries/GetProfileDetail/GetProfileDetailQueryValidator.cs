@@ -6,6 +6,6 @@ public class GetProfileDetailQueryValidator : AbstractValidator<GetProfileDetail
 {
     public GetProfileDetailQueryValidator()
     {
-        RuleFor(v => v.Id).NotEmpty();
+        RuleFor(v => v.Username).NotEmpty();
     }
 }

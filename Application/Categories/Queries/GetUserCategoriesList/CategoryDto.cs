@@ -12,7 +12,7 @@ public class CategoryDto : IMapFrom<Category>
     public string Color { get; set; }
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Category, UserCategoriesListVm>()
-            .ForMember(u => u.ProfileId, opt => opt.MapFrom(i => i.ProfileId));
+        profile.CreateMap<Category, CategoryDto>()
+            .ForMember(u => u.UserId, opt => opt.MapFrom(i => i.ProfileId));
     }
 }

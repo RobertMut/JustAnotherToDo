@@ -21,6 +21,7 @@ public class SeedSampleDataCommandHandler : IRequestHandler<SeedInitialDataComma
     public async Task<Unit> Handle(SeedInitialDataCommand request, CancellationToken cancellationToken)
     {
         var seeder = new InitialDataSeeder(_context, _manager);
+
         await seeder.SeedAsync(cancellationToken);
         return Unit.Value;;
     }

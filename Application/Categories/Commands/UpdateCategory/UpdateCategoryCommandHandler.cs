@@ -4,16 +4,16 @@ using MediatR;
 
 namespace JustAnotherToDo.Application.Categories.Commands.UpdateCategory;
 
-public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
+public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand>
 {
     private readonly IJustAnotherToDoDbContext _context;
 
-    public UpdateProfileCommandHandler(IJustAnotherToDoDbContext context)
+    public UpdateCategoryCommandHandler(IJustAnotherToDoDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.Categories.FindAsync(request.Id);
         if (entity == null) throw new NotFoundException(nameof(Categories), request.Id);

@@ -15,7 +15,8 @@ public class UserTodoDto : IMapFrom<ToDo>
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<ToDo, UserTodosListVm>()
+        profile.CreateMap<ToDo, UserTodoDto>()
+            .ForMember(p => p.Name, opt => opt.MapFrom(u => u.Name))
             .ForMember(p => p.ProfileId, opt => opt.MapFrom(up => up.ProfileId));
     }
 }

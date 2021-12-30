@@ -1,25 +1,23 @@
 ﻿using JustAnotherToDo.Application.Common.Exceptions;
 using JustAnotherToDo.Application.Common.Interfaces;
+using JustAnotherToDo.Application.Models;
 using JustAnotherToDo.Domain.Entities;
 using MediatR;
 
 namespace JustAnotherToDo.Application.Profiles.Commands.DeleteProfile;
 
-public class DeleteTodoCommandHandler : IRequestHandler<DeleteProfileCommand>
+public class DeleteProfileCommandHandler : IRequestHandler<DeleteProfileCommand>
 {
-    private readonly IJustAnotherToDoDbContext _context;
+    private readonly IUserManager _manager;
 
-    public DeleteTodoCommandHandler(IJustAnotherToDoDbContext _context)
+    public DeleteProfileCommandHandler(IUserManager manager)
     {
-        this._context = _context;
+        _manager = manager;
     }
 
     public async Task<Unit> Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Profiles.FindAsync(request.Id);
-        if (entity == null) throw new NotFoundException(nameof(Category), request.Id);
-        _context.Profiles.Remove(entity);
-        await _context.SaveChangesAsync(cancellationToken);
+        var deleted = await _manager.DeleteUserAsync(request.Id);
         return Unit.Value;
     }
 }
