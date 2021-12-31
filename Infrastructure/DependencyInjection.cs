@@ -37,6 +37,7 @@ public static class DependencyInjection
                 opt.Events.RaiseInformationEvents = true;
                 opt.Events.RaiseSuccessEvents = true;
             })
+            .AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"))
             .AddInMemoryApiResources(configuration.GetSection("IdentityServer:Resources"))
             .AddInMemoryApiScopes(configuration.GetSection("IdentityServer:Scopes"))
             .AddInMemoryClients(configuration.GetSection("IdentityServer:Clients"))

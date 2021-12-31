@@ -1,0 +1,14 @@
+mat-card{
+    margin: 2%;
+    display: flex;
+    flex-flow: column;
+    width:100%;
+}
+form{
+    display:flex;
+    flex-flow: column;
+    margin: 1.5%;
+}
+form h4, mat-card h2{
+    text-align: center;
+}
