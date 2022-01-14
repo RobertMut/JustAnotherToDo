@@ -5,7 +5,7 @@ using MediatR;
 
 namespace JustAnotherToDo.Application.Profiles.Commands.UpdateProfile;
 
-public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
+public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, Guid>
 {
     private readonly IUserManager _manager;
 
@@ -14,16 +14,17 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
         _manager = manager;
     }
 
-    public async Task<Unit> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
         var entity = await _manager.GetUserByIdAsync(request.UserId);
         if (entity == null) throw new NotFoundException(nameof(Profiles), request.UserId);
-        await _manager.UpdateProfileAsync(new UserProfile
+        var guid = await _manager.UpdateProfileAsync(new UserProfile
         {
             UserId = entity.UserId,
-            Username = request.Name,
-            Password = request.Password
+            Username = request.Username,
+            Password = request.Password,
+            AccessLevel = request.AccessLevel
         }, cancellationToken);
-        return Unit.Value;
+        return guid;
     }
 }

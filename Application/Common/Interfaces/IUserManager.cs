@@ -9,5 +9,5 @@ public interface IUserManager
     Task<UserProfile> GetUserAsync(string userName);
     Task<UserProfile> GetUserByIdAsync(Guid userId);
     Task<Guid> UpdateProfileAsync(UserProfile profile, CancellationToken ct);
-    Task<Guid> DeleteUserAsync(Guid userId);
+    Task<Guid> DeleteUserAsync(Guid userId, CancellationToken ct);
 }

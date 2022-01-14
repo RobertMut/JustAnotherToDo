@@ -4,5 +4,5 @@ namespace JustAnotherToDo.Application.Profiles.Commands.DeleteProfile;
 
 public class DeleteProfileCommand : IRequest
 {
-    public Guid Id { get; set; }
+    public Guid UserId { get; set; }
 }

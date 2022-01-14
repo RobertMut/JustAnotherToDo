@@ -25,8 +25,7 @@ public class GetUserCategoriesListQueryHandler : IRequestHandler<GetUserCategori
         if (categories == null) throw new NotFoundException(nameof(Categories), request.ProfileId);
         var vm = new UserCategoriesListVm
         {
-            Categories = categories,
-            ProfileId = request.ProfileId
+            Categories = categories
 
         };
         return vm;

@@ -2,7 +2,7 @@
 
 namespace JustAnotherToDo.Application.Categories.Commands.UpdateCategory;
 
-public class UpdateCategoryCommand : IRequest<Guid>, IRequest<Unit>
+public class UpdateCategoryCommand : IRequest
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

@@ -1,5 +1,6 @@
 ﻿using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Domain.Entities;
+using JustAnotherToDo.Domain.Enums;
 
 namespace JustAnotherToDo.Application.System.Commands.InitialData;
 
@@ -27,6 +28,8 @@ public class InitialDataSeeder
         {
             Username = "Administrator",
             Password = "1234",
+            AccessLevel = AccessLevel.Administrator,
+
         };
         await _manager.CreateUserAsync("Administrator", "1234", cancellationToken);
     }

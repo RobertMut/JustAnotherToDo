@@ -17,7 +17,7 @@ public class DeleteProfileCommandHandler : IRequestHandler<DeleteProfileCommand>
 
     public async Task<Unit> Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
     {
-        var deleted = await _manager.DeleteUserAsync(request.Id);
+        var deleted = await _manager.DeleteUserAsync(request.UserId, cancellationToken);
         return Unit.Value;
     }
 }

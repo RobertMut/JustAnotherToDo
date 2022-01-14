@@ -2,6 +2,7 @@
 using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace JustAnotherToDo.Application.Categories.Commands.DeleteCategory;
 
@@ -16,8 +17,9 @@ public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryComman
 
     public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Categories.FindAsync(request.Id);
+        var entity = await _context.Categories.SingleOrDefaultAsync(c => c.Id == request.Id);
         if (entity == null) throw new NotFoundException(nameof(Category), request.Id);
+        await _context.ToDos.Where(t => t.CategoryId == request.Id).ForEachAsync(t => t.CategoryId = null);
         _context.Categories.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
         return Unit.Value;
