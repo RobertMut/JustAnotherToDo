@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
@@ -23,6 +23,11 @@ code {
 }
 .evenly{
   justify-content: space-evenly;
+}
+.grid-me{
+  display: grid;
+  grid-template-columns: 0.5fr 0.5fr 1fr;
+  grid-template-rows: 0.5fr 0.5fr 1fr;
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

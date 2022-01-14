@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from './auth/auth-config.module';
-import { filter } from 'rxjs/operators';
 import { JwksValidationHandler } from 'angular-oauth2-oidc-jwks';
 
 @Component({

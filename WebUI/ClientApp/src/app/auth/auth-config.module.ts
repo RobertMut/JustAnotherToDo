@@ -4,11 +4,13 @@ import angular from '../../assets/angular.json'
 
 export const authConfig: AuthConfig = {
     issuer: angular.Authority,
-    redirectUri: window.location.origin + '/index.html',
+    redirectUri: window.location.origin + '/oauth-redirect/',
     clientId: angular.ClientId,
     oidc: true,
     dummyClientSecret: angular.ClientSecret,
-    //responseType: "id_token token",
+    responseType: "id_token token",
+    requestAccessToken: true,
+    logoutUrl: angular.Authority + '/Account/Logout', 
     scope: angular.Scope,
     showDebugInformation: true
 }

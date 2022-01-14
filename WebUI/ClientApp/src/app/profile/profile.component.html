@@ -1,0 +1,29 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{profile.username}}</mat-card-title>
+        <mat-card-subtitle>{{profile.id}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <p>Permissions: {{levels[profile.accessLevel]}}</p>
+        <form (ngSubmit)="onProfile(profileForm.value)" #profileForm="ngForm" class="centered">
+            <h4>Change password</h4>
+            <mat-form-field class="centered">
+                <mat-label>Current password</mat-label>
+                <input matInput type="password" name="currentpass" ngModel/>
+              </mat-form-field>
+            <mat-form-field class="centered">
+              <mat-label>New password</mat-label>
+              <input matInput type="password" name="pass" ngModel/>
+            </mat-form-field>
+            <mat-form-field class="centered">
+                <mat-label>Repeat new password</mat-label>
+                <input matInput type="password" name="repeatedpass" ngModel/>
+              </mat-form-field>
+            <button mat-raised-button type="submit" [disabled]="(profileForm.value.pass !== profileForm.value.repeatedpass)">Update!</button>
+            <p>{{profileForm.value.pass !== profileForm.value.repeatedpass ? "Passwords must match!" : ""}}</p>
+          </form>
+    </mat-card-content>
+</mat-card>
+<mat-card *ngIf="profile.accessLevel===2">
+    <button mat-raised-button   [routerLink]="['/profiles']">Manage user profiles</button>
+</mat-card>

@@ -1,6 +1,6 @@
 <header>
   <nav
-    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
+    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3"
   >
     <div class="container">
       <a class="navbar-brand" [routerLink]="['/']">WebUI</a>
@@ -17,7 +17,7 @@
       </button>
       <div
         class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
-        [ngClass]="{ show: isExpanded }"
+        [ngClass]="{ show: isExpanded }" *ngIf="isValid"
       >
         <ul class="navbar-nav flex-grow">
           <li
@@ -25,16 +25,17 @@
             [routerLinkActive]="['link-active']"
             [routerLinkActiveOptions]="{ exact: true }"
           >
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+            <a class="nav-link text-light" [routerLink]="['/home']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
-              >Counter</a
+            <a class="nav-link text-light" [routerLink]="['/profile']"
+              >Profile</a
             >
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Fetch data</a
+            <a class="nav-link text-light" (click)="logout()"
+            [routerLink]="['/']"
+              >Logout</a
             >
           </li>
         </ul>

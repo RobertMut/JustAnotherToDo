@@ -1,0 +1,82 @@
+.mat-table {
+    width:100%;
+    border-collapse: inherit;
+}
+.mat-row, .mat-cell{
+    height:auto;
+    margin-bottom: 0.1%;
+    width:100%;
+}
+.mat-cell {
+    display:inline-table;
+    opacity: 75%;
+}
+.mat-cell, .cdk-cell, .card, .cdk-column-name, .mat-column-name{
+    border-width: 5px;
+    border-radius: 30px;
+}
+.mat-header-row {
+    display: table;
+    text-align-last: center;
+    width: 100%;
+    padding: 0;
+}
+.mat-header-cell, .cdk-header-cell{
+    border-color: none;
+    border: none;
+}
+.card-body{
+    display: flex;
+    align-items: baseline;
+    place-content: space-between;
+    margin: 1% 1% 0 1%;
+    flex: 0 0;
+}
+.card-text{
+    opacity: 50%;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+}
+.card-text button{
+    border: none;
+    background: none;
+}
+.no-padding{
+    padding: 0;
+}
+form {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.mat-expansion-panel {
+    display: flex;
+    flex-flow: column;
+}
+#column {
+    display:flex;
+    flex-direction: column;
+    font-size: medium;
+}
+#column p{
+    font-size: 10px;
+}
+#select-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#select-content button{
+    border: 0px;
+    border-radius: 80px;
+    font-size: 3px;
+    display: flex;
+    align-self: center;
+}
+#select-content button .mat-icon{
+    margin: 0;
+}
+#category-submit {
+    height: max-content;
+}

@@ -3,12 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 //material
@@ -16,31 +13,56 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
+import { CdkTableModule } from '@angular/cdk/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatIconModule } from '@angular/material/icon'
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ColorPickerModule } from 'ngx-color-picker';
+import { MatPaginatorModule } from '@angular/material/paginator';
 //auth
 import {
   OAuthModule,
-  OAuthStorage,
-  DateTimeProvider,
-  OAuthService,
-  UrlHelperService,
-  OAuthLogger,
+  OAuthStorage
 } from 'angular-oauth2-oidc';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { authConfig } from './auth/auth-config.module'
-const modules = [
+
+import angular from '../assets/angular.json';
+import { OauthRedirectComponent } from './oauth-redirect/oauth-redirect.component';
+import { ProfilesComponent } from './profiles/profiles.component';
+import { ProfileComponent } from './profile/profile.component'
+
+const MODULES = [
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
-  MatCardModule
+  MatCardModule,
+  MatTableModule,
+  CdkTableModule,
+  MatSelectModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatIconModule,
+  MatMenuModule,
+  MatExpansionModule,
+  ColorPickerModule,
+  MatToolbarModule,
+  MatPaginatorModule
 ]
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
-    AuthenticationComponent
+    AuthenticationComponent,
+    OauthRedirectComponent,
+    ProfilesComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -48,21 +70,27 @@ const modules = [
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: AuthenticationComponent, pathMatch: 'full'},
+      { path: 'oauth-redirect', component: OauthRedirectComponent},
       { path: 'home', component: HomeComponent },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'profiles', component: ProfilesComponent },
+      { path: 'profile', component: ProfileComponent }
     ]),
-    OAuthModule.forRoot(),
+    OAuthModule.forRoot({
+      resourceServer: {
+        allowedUrls: [angular.Authority+'/api/'],
+        sendAccessToken: true
+      }
+    }),
     BrowserAnimationsModule,
     //material
-    modules,
+    MODULES,
   ],
   exports: [
-    modules
+    MODULES
   ],
   providers: [
         {provide: AuthConfig, useValue: authConfig },
-        {provide: OAuthStorage, useValue: localStorage }
+        {provide: OAuthStorage, useValue: sessionStorage }
   ],
   bootstrap: [AppComponent]
 })

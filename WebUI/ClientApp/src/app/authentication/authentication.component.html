@@ -9,29 +9,19 @@
             </mat-form-field>
             <mat-form-field class="centered">
               <mat-label>Password</mat-label>
-              <input matInput type="password" name="pass" ngModel/>
+              <input matInput type="password" name="password" ngModel/>
             </mat-form-field>
             <mat-form-field class="centered">
                 <mat-label>Repeat password</mat-label>
-                <input matInput type="password" name="repeatedpass" ngModel/>
+                <input matInput type="password" name="newpassword" ngModel/>
               </mat-form-field>
-            <button mat-raised-button type="submit" [disabled]="(registerForm.value.pass !== registerForm.value.repeatedpass)">Register!</button>
-            <p>{{registerForm.value.pass !== registerForm.value.repeatedpass ? "Passwords must match!" : ""}}</p>
+            <button mat-raised-button type="submit" [disabled]="(registerForm.value.password !== registerForm.value.newpassword)">Register!</button>
+            <p>{{registerForm.value.newpassword !== registerForm.value.password ? "Passwords must match!" : ""}}</p>
+            <p>{{error}}</p>
           </form>
     </mat-card>
     <mat-card id="login">
         <h2>Sign in!</h2>
-        <form (ngSubmit)="onLogin(loginForm.value)" #loginForm="ngForm" class="centered">
-            <h4>Login</h4>
-            <mat-form-field class="centered">
-              <mat-label>Username</mat-label>
-              <input matInput type="text" name="login" ngModel/>
-            </mat-form-field>
-            <mat-form-field class="centered">
-              <mat-label>Password</mat-label>
-              <input matInput type="password" name="pass" ngModel/>
-            </mat-form-field>
-            <button mat-raised-button type="submit">Sign in!</button>
-          </form>
+            <button mat-raised-button (click)="onLogin()">Click here to sign in!</button>
     </mat-card>
 </div>

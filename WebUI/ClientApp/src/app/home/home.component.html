@@ -1,14 +1,108 @@
-<h1>Hello, world!</h1>
-<p>Welcome to your new single-page application, built with:</p>
-<ul>
-  <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-  <li><a href='https://angular.io/'>Angular</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
-  <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-</ul>
-<p>To help you get started, we've also set up:</p>
-<ul>
-  <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-  <li><strong>Angular CLI integration</strong>. In development mode, there's no need to run <code>ng serve</code>. It runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-  <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration automatically invokes <code>ng build</code> to produce minified, ahead-of-time compiled JavaScript files.</li>
-</ul>
-<p>The <code>ClientApp</code> subdirectory is a standard Angular CLI application. If you open a command prompt in that directory, you can run any <code>ng</code> command (e.g., <code>ng test</code>), or use <code>npm</code> to install extra packages into it.</p>
+<table mat-table [dataSource]="dataSource" *ngIf="todoLoaded">
+  <ng-container matColumnDef="name" >
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-expansion-panel *ngIf="categoryLoaded" class="no-padding">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            ToDos
+          </mat-panel-title>
+          <mat-panel-description>
+            Manage your ToDos
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-expansion-panel *ngIf="categoryLoaded">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              ToDo
+            </mat-panel-title>
+            <mat-panel-description>
+              Add new ToDo
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <form (ngSubmit)="onAdd(addForm.value)" #addForm="ngForm">
+            <mat-form-field>
+              <mat-label>To-do name</mat-label>
+              <input matInput type="text" name="name" ngModel/>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker" name="endDate" ngModel/>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Category</mat-label>
+                <mat-select name="categoryId" class="buttons" ngModel>
+                  <mat-option [value]="null"></mat-option>
+                  <mat-option *ngFor="let category of categories" [value]="category.id" [style.background]="category.color+'88'">
+                    {{category.name}}
+                    <button mat-button (click)="deleteCategory(category)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  <!--<div id="select-content">
+                    
+
+                  </div>-->
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            <button mat-raised-button type="submit" [disabled]="!(addForm.value.name)">Add</button>
+          </form>
+        </mat-expansion-panel>
+        <mat-expansion-panel *ngIf="categoryLoaded">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Category
+            </mat-panel-title>
+            <mat-panel-description>
+              Add new Category
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <form (ngSubmit)="onCategory(categoryForm.value)" #categoryForm="ngForm">
+            <mat-form-field>
+              <mat-label>Name</mat-label>
+              <input matInput type="text" name="name" ngModel/>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Color</mat-label>
+              <input matInput [(colorPicker)]="color" [style.background]="color" [cpOutputFormat]="'hex'" [cpDialogDisplay]="'inline'" [cpCloseClickOutside]="true" [value]="color" name="color" ngModel/>
+            </mat-form-field>
+            <button id="category-submit" mat-raised-button type="submit" [disabled]="!(categoryForm.value.name)">Add</button>
+          </form>
+        </mat-expansion-panel>
+      </mat-expansion-panel>
+    </th>
+      <td mat-cell *matCellDef="let element" class="card" [style.background]="element.color+'88'" [style.border-color]="element.color+'88'">
+        <div class="card-body no-padding">
+          <div id="column" class="card-title">
+            {{element.name}}
+            <mat-form-field *ngIf="element.canEdit"> 
+              <mat-label>To-do name</mat-label>
+              <input matInput [(ngModel)]="element.name" type="text"/>
+            </mat-form-field>
+            <p>{{element.category}}
+              <mat-form-field *ngIf="element.canEdit">
+                <mat-label>Category</mat-label>
+                <mat-select name="categoryId" class="buttons" [(ngModel)]="element.categoryId">
+                  <mat-option [value]="null"></mat-option>
+                  <mat-option *ngFor="let category of categories" [value]="category.id" [style.background]="category.color+'88'" [disabled]="category === null">{{category.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
+          </div>
+          <div class="card-text">
+            {{element.endDate}}
+            <button (click)="delete(element)"><mat-icon>delete</mat-icon></button>
+            <button (click)="edit(element)" *ngIf="!element.canEdit"><mat-icon>create</mat-icon></button>
+            <button (click)="edit(element)" *ngIf="element.canEdit"><mat-icon>done</mat-icon></button>
+          </div>
+          
+          
+          
+        </div>
+      </td>
+
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="row.deleted"></tr>
+</table>
