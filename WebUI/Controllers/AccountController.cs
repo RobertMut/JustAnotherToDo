@@ -91,7 +91,8 @@ namespace WebUI.Controllers
                     var identityUser = new IdentityServerUser(user.Username)
                     {
                         DisplayName = user.Username,
-                        AuthenticationTime = DateTime.UtcNow
+                        AuthenticationTime = DateTime.UtcNow,
+
                     };
 
                     await HttpContext.SignInAsync(identityUser, authenticationProperties);
@@ -223,7 +224,6 @@ namespace WebUI.Controllers
                 AllowRememberLogin = AccountOptions.AllowRememberLogin,
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
-                //ReturnUrl = context?.RedirectUri,
                 Username = context?.LoginHint
             };
         }

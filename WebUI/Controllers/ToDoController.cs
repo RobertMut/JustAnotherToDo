@@ -1,20 +1,18 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Security.Claims;
-using JustAnotherToDo.Application.Common.Interfaces;
+﻿using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Application.Profiles.Queries.GetProfileDetail;
 using JustAnotherToDo.Application.Todos.Commands.CreateTodo;
 using JustAnotherToDo.Application.Todos.Commands.DeleteTodo;
 using JustAnotherToDo.Application.Todos.Commands.UpdateTodo;
 using JustAnotherToDo.Application.Todos.Queries.GetUserTodosList;
-using JustAnotherToDo.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Controllers;
 [ApiController]
-[Authorize]
-[Route("[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Route("api/[controller]")]
 
 public class ToDoController : ControllerBase
 {
@@ -46,6 +44,11 @@ public class ToDoController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostTodo(CreateTodoCommand command)
     {
+        var user = await _mediator.Send(new GetProfileDetailQuery
+        {
+            Username = _currentUser.UserName
+        });
+        command.ProfileId = user.Id;
         var guid = await _mediator.Send(command);
         return Ok(guid);
     }

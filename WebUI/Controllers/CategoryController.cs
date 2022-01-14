@@ -5,13 +5,14 @@ using JustAnotherToDo.Application.Categories.Queries.GetUserCategoriesList;
 using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Application.Profiles.Queries.GetProfileDetail;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Controllers;
 [ApiController]
-[Authorize]
-[Route("[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Route("api/[controller]")]
 public class CategoryController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -42,6 +43,11 @@ public class CategoryController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostCategory(CreateCategoryCommand command)
     {
+        var user = await _mediator.Send(new GetProfileDetailQuery
+        {
+            Username = _currentUser.UserName
+        });
+        command.ProfileId = user.Id;
         var guid = await _mediator.Send(command);
         return Ok(guid);
     }

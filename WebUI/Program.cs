@@ -21,9 +21,16 @@ builder.Services.AddApplication();
 builder.Services.AddHealthChecks().AddDbContextCheck<JustAnotherToDoDbContext>();
 builder.Services.AddHealthChecks().AddDbContextCheck<ApplicationDBContext>();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddMvc()
+builder.Services.AddMvc(opt =>
+    {
+        //var policy = new AuthorizationPolicyBuilder()
+        //    .RequireAuthenticatedUser()
+        //    .RequireScope("api").Build();
+        //opt.Filters.Add(new AuthorizeFilter(policy));
+    })
     .AddNewtonsoftJson();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddCors();
 
 builder.Services.AddSpaStaticFiles(conf =>
 {
