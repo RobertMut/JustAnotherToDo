@@ -2,6 +2,7 @@
 using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Application.Models;
 using JustAnotherToDo.Domain.Entities;
+using JustAnotherToDo.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,10 +19,13 @@ namespace JustAnotherToDo.Infrastructure.Identity
 
         public async Task<Guid> CreateUserAsync(string userName, string password, CancellationToken ct)
         {
+            var searchUser = await _context.Profiles.FirstOrDefaultAsync(u => u.Username == userName);
+            if (searchUser != null) return Guid.Empty;
             var user = new UserProfile()
             {
                 Username = userName,
-                Password = password
+                Password = password,
+                AccessLevel = AccessLevel.User
             };
             var entity = await _context.Profiles.AddAsync(user, ct);
             await _context.SaveChangesAsync(ct);
@@ -44,16 +48,22 @@ namespace JustAnotherToDo.Infrastructure.Identity
 
         public async Task<Guid> UpdateProfileAsync(UserProfile profile, CancellationToken ct)
         {
-            var result = _context.Profiles.Update(profile);
+            var user = await _context.Profiles.FirstOrDefaultAsync(u => u.UserId == profile.UserId);
+            user.UserId = profile.UserId;
+            if (!string.IsNullOrEmpty(profile.Password))
+                user.Password = profile.Password;
+            user.Username = profile.Username;
+            user.AccessLevel = profile.AccessLevel;
             await _context.SaveChangesAsync(ct);
-            return result.Entity.UserId;
+            return user.UserId;
         }
 
-        public async Task<Guid> DeleteUserAsync(Guid userId)
+        public async Task<Guid> DeleteUserAsync(Guid userId, CancellationToken ct)
         {
             var result = await _context.Profiles.FirstOrDefaultAsync(c => c.UserId == userId);
             if (result == null) throw new NotFoundException(nameof(UserProfile), userId);
             var deleted = _context.Profiles.Remove(result);
+            _context.SaveChangesAsync(ct);
             return deleted.Entity.UserId;
         }
     }

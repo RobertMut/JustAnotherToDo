@@ -19,12 +19,21 @@ public class GetUserTodosListQueryHandler : IRequestHandler<GetUserTodosListQuer
 
     public async Task<UserTodosListVm> Handle(GetUserTodosListQuery request, CancellationToken cancellationToken)
     {
-        var todos = await _context.ToDos.ProjectTo<UserTodoDto>(_mapper.ConfigurationProvider)
-            .Where(u => u.ProfileId == request.ProfileId).ToListAsync();
+        var join = await (from t in _context.ToDos
+                          where t.ProfileId == request.ProfileId
+                          select new UserTodoDto
+                          {
+                              Id = t.Id,
+                              Name = t.Name,
+                              CreationDate = t.CreationDate,
+                              EndDate = t.EndDate,
+                              Category = t.Category.Name,
+                              Color = t.Category.Color,
+                              ProfileId = t.ProfileId
+                          }).ToListAsync();
         var vm = new UserTodosListVm
         {
-            Todos = todos,
-            ProfileId = request.ProfileId
+            Todos = join
         };
         return vm;
     }

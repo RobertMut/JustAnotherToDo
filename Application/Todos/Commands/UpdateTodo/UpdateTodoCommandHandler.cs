@@ -21,7 +21,9 @@ public class UpdateTodoCommandHandler : IRequestHandler<UpdateTodoCommand>
         //entity.CategoryId = (Guid)request.CategoryId;
         entity.EndDate = request.EndTime;
         entity.Id = request.Id;
+        entity.CategoryId = request.CategoryId;
         await _context.SaveChangesAsync(cancellationToken);
         return Unit.Value;
     }
+
 }

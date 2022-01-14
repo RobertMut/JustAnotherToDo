@@ -20,7 +20,7 @@ public class CreateTodoCommandHandler : IRequestHandler<CreateTodoCommand, Guid>
             Name = request.Name,
             CreationDate = DateTime.Now,
             EndDate = request.EndDate,
-            //CategoryId = (Guid)request.CategoryId,
+            CategoryId = request.CategoryId,
             ProfileId = request.ProfileId,
         };
         _context.ToDos.Add(entity);

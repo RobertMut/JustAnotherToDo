@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -45,29 +46,29 @@ public static class DependencyInjection
             //.AddJwtBearerClientAuthentication()
             .AddDeveloperSigningCredential();
         services.AddHttpContextAccessor();
-        services.AddAuthentication(opt =>
+        services.AddAuthentication(auth =>
             {
-                //opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                //opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                //auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                //auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            //.AddIdentityServerAuthentication("Bearer", opt =>
-            //{
-            //    opt.ApiName = "api";
-            //    opt.Authority = section.GetValue<string>("Authority");
-            //})
-            //.AddLocalApi();
             .AddJwtBearer(bearer =>
             {
                 var section = configuration.GetSection("IdentityServer");
                 bearer.Authority = section.GetValue<string>("Authority");
                 bearer.RequireHttpsMetadata = false;
-                bearer.Audience = "api";
+                bearer.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidAudiences = new []{"web_ui", "swagger_ui"},
+                    ValidateIssuer = true,
+                    ValidateLifetime = true
+                };
                 bearer.BackchannelHttpHandler = new HttpClientHandler()
                 {
                     ServerCertificateCustomValidationCallback =
                         HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                 };
-            });
+            }).AddLocalApi();
         services.AddAuthorization();
         services.Configure<AuthenticationOptions>(configuration);
         return services;
