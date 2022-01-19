@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using JustAnotherToDo.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

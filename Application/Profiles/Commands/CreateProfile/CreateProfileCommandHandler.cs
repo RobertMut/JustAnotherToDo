@@ -1,5 +1,4 @@
 ﻿using JustAnotherToDo.Application.Common.Interfaces;
-using JustAnotherToDo.Domain.Entities;
 using MediatR;
 
 namespace JustAnotherToDo.Application.Profiles.Commands.CreateProfile;

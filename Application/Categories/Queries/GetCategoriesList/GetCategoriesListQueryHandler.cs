@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JustAnotherToDo.Application.Categories.Queries.GetCategoriesList;
 
-public class GetUserCategoriesListQueryHandler : IRequestHandler<GetCategoriesListQuery, CategoriesListVm>
+public class GetCategoriesListQueryHandler : IRequestHandler<GetCategoriesListQuery, CategoriesListVm>
 {
     private readonly IJustAnotherToDoDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetUserCategoriesListQueryHandler(IJustAnotherToDoDbContext context, IMapper mapper)
+    public GetCategoriesListQueryHandler(IJustAnotherToDoDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;

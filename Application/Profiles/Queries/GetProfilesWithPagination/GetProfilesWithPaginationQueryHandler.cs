@@ -4,7 +4,6 @@ using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Application.Common.Mappings;
 using JustAnotherToDo.Application.Models;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace JustAnotherToDo.Application.Profiles.Queries.GetProfilesWithPagination;
 

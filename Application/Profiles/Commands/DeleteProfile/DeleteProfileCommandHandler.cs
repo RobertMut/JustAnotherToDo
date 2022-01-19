@@ -1,7 +1,4 @@
-﻿using JustAnotherToDo.Application.Common.Exceptions;
-using JustAnotherToDo.Application.Common.Interfaces;
-using JustAnotherToDo.Application.Models;
-using JustAnotherToDo.Domain.Entities;
+﻿using JustAnotherToDo.Application.Common.Interfaces;
 using MediatR;
 
 namespace JustAnotherToDo.Application.Profiles.Commands.DeleteProfile;

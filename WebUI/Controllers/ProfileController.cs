@@ -72,10 +72,13 @@ public class ProfileController : ControllerBase
         var guid = await _mediator.Send(command);
         return Ok(guid);
     }
-    [HttpDelete]
-    public async Task<IActionResult> DeleteProfile(DeleteProfileCommand command)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProfile(Guid id)
     {
-        var guid = await _mediator.Send(command);
+        var guid = await _mediator.Send(new DeleteProfileCommand
+        {
+            UserId = id
+        });
         return Ok(guid);
     }
 }

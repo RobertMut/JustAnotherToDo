@@ -32,9 +32,7 @@ export class ToDoService implements ITodoItems {
     })
   }
   delete(command: IDeleteToDoCommand): void {
-    this.http.delete(this.base_url, {
-      body: command
-    }).subscribe({
+    this.http.delete(this.base_url + '/' + command.id).subscribe({
       error: (e) => {
         this.auth.canActivate()
         console.error(e)

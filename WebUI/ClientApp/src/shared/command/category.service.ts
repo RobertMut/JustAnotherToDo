@@ -33,9 +33,7 @@ export class CategoryService implements ICategoryItems{
     })
   }
   delete(command: IDeleteCategoryCommand): void {
-    this.http.delete(this.base_url, {
-      body: command
-    }).subscribe({
+    this.http.delete(this.base_url+'/'+command.id).subscribe({
       error: (e) => {
         this.auth.canActivate()
         console.error(e)

@@ -1,6 +1,5 @@
 ﻿using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Domain.Entities;
-using JustAnotherToDo.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace JustAnotherToDo.Persistence

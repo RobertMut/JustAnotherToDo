@@ -136,7 +136,7 @@ public static class DependencyInjection
         {
             var services = scope.ServiceProvider;
             var appContext = services.GetRequiredService<ApplicationDBContext>();
-            var user = appContext.Profiles.FirstOrDefaultAsync(u => u.Username == "Administrator");
+            var user = await appContext.Profiles.FirstOrDefaultAsync(u => u.Username == "Administrator");
             if (user == null)
             {
                 try
@@ -150,7 +150,7 @@ public static class DependencyInjection
                 }
                 catch (Exception ex)
                 {
-
+                    Console.WriteLine($"{ex}\r\n{ex.StackTrace}");    
                 }
             }
 

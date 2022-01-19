@@ -37,9 +37,7 @@ export class ProfileService implements IProfileItems {
     })
   }
   delete(command: IDeleteProfileCommand): void {
-    this.http.delete(this.base_url, {
-      body: command
-    }).subscribe({
+    this.http.delete(this.base_url + '/' + command.userId).subscribe({
       error: (e) => {
         this.auth.canActivate()
         console.error(e)

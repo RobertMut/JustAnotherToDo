@@ -75,3 +75,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapDefaultControllerRoute();
 });
 app.Run();
+
+public partial class Program {}

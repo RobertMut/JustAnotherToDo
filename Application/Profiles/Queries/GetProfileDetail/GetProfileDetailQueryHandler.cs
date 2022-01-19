@@ -3,7 +3,6 @@ using JustAnotherToDo.Application.Common.Exceptions;
 using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace JustAnotherToDo.Application.Profiles.Queries.GetProfileDetail;
 

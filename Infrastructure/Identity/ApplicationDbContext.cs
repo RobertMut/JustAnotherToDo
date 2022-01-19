@@ -1,9 +1,6 @@
-﻿using IdentityServer4.EntityFramework.Options;
-using JustAnotherToDo.Application.Common.Interfaces;
+﻿using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Domain.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace JustAnotherToDo.Infrastructure.Identity
 {

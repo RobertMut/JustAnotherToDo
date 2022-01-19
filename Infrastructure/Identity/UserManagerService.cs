@@ -1,9 +1,7 @@
 ﻿using JustAnotherToDo.Application.Common.Exceptions;
 using JustAnotherToDo.Application.Common.Interfaces;
-using JustAnotherToDo.Application.Models;
 using JustAnotherToDo.Domain.Entities;
 using JustAnotherToDo.Domain.Enums;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace JustAnotherToDo.Infrastructure.Identity

@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace JustAnotherToDo.Application.Models;
+﻿namespace JustAnotherToDo.Application.Models;
 
 public class Result
 {

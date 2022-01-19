@@ -1,5 +1,4 @@
-﻿using JustAnotherToDo.Application.Models;
-using JustAnotherToDo.Domain.Entities;
+﻿using JustAnotherToDo.Domain.Entities;
 
 namespace JustAnotherToDo.Application.Common.Interfaces;
 

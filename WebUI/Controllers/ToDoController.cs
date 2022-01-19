@@ -59,10 +59,13 @@ public class ToDoController : ControllerBase
         return Ok(guid);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete(DeleteTodoCommand command)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var guid = await _mediator.Send(command);
+        var guid = await _mediator.Send(new DeleteTodoCommand
+        {
+            Id = id
+        });
         return Ok(guid);
     }
 }
