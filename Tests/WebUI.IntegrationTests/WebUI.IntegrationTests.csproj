@@ -34,9 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-    <ProjectReference Include="..\Persistence\Persistence.csproj" />
-    <ProjectReference Include="..\WebUI\WebUI.csproj" />
+    <ProjectReference Include="..\..\Src\Infrastructure\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Src\Infrastructure\Persistence\Persistence.csproj" />
+    <ProjectReference Include="..\..\Src\Presentation\WebUI\WebUI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

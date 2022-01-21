@@ -28,9 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-    <ProjectReference Include="..\Persistence\Persistence.csproj" />
+    <ProjectReference Include="..\..\Src\Core\Application\Application.csproj" />
+    <ProjectReference Include="..\..\Src\Infrastructure\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Src\Infrastructure\Persistence\Persistence.csproj" />
   </ItemGroup>
 
 </Project>

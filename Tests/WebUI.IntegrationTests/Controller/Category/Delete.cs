@@ -23,7 +23,7 @@ public class Delete : IClassFixture<CustomWebApplicationFactory<CategoryControll
     {
 
         var response = await _client
-               .DeleteAsync($"api/Category/{Utilities.Category2Id}");
+               .DeleteAsync($"api/Category/{Utilities.CategoryId}");
         response.EnsureSuccessStatusCode();
 
     }

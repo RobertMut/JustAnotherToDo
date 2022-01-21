@@ -15,7 +15,7 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 
-builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddHealthChecks().AddDbContextCheck<JustAnotherToDoDbContext>();
