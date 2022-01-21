@@ -23,7 +23,6 @@
     <Folder Include="Categories\Commands\CreateCategory\" />
     <Folder Include="Categories\Commands\DeleteCategory\" />
     <Folder Include="Categories\Commands\UpdateCategory\" />
-    <Folder Include="Common\Exceptions\" />
     <Folder Include="Common\Mappings\" />
     <Folder Include="Common\Behaviours\" />
     <Folder Include="Common\Extensions\" />

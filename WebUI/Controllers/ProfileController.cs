@@ -1,4 +1,5 @@
-﻿using JustAnotherToDo.Application.Common.Interfaces;
+﻿using JustAnotherToDo.Application.Common.Exceptions;
+using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Application.Models;
 using JustAnotherToDo.Application.Profiles.Commands.CreateProfile;
 using JustAnotherToDo.Application.Profiles.Commands.DeleteProfile;
@@ -35,25 +36,37 @@ public class ProfileController : ControllerBase
         {
             Username = _currentUser.UserName
         });
+
         if (user.AccessLevel != AccessLevel.Administrator) return StatusCode(401);
-        return await _mediator.Send(query);
+        var paginatedProfiles = await _mediator.Send(query);
+        if (paginatedProfiles.Items.Count == 0) return NotFound("Empty");
+        return paginatedProfiles;
+
     }
 
     [HttpGet("profile")]
-    public async Task<ActionResult<ProfileDetailVm>> GetProfile([FromQuery]string? username)
+    public async Task<ActionResult<ProfileDetailVm>> GetProfile([FromQuery] string? username)
     {
         var user = await _mediator.Send(new GetProfileDetailQuery
         {
             Username = _currentUser.UserName
         });
-        if (string.IsNullOrEmpty(username)) username = user.Username;
         if (user == null) return BadRequest("User does not exist");
         if (user.AccessLevel != AccessLevel.Administrator && user.Username != username) return StatusCode(401);
-        var profile = await _mediator.Send(new GetProfileDetailQuery
+        try
         {
-            Username = username
-        });
-        return profile;
+            var profile = await _mediator.Send(new GetProfileDetailQuery
+            {
+                Username = user.Username
+            });
+            return profile;
+        }
+        catch (NotFoundException)
+        {
+            return NotFound("User not found!");
+        }
+
+
     }
     [AllowAnonymous]
     [SecurityHeaders]
@@ -68,17 +81,31 @@ public class ProfileController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> UpdateProfile(UpdateProfileCommand command)
     {
-        
-        var guid = await _mediator.Send(command);
-        return Ok(guid);
+        try
+        {
+            var guid = await _mediator.Send(command);
+            return Ok(guid);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound("Invalid id");
+        }
     }
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProfile(Guid id)
     {
-        var guid = await _mediator.Send(new DeleteProfileCommand
+        try
         {
-            UserId = id
-        });
-        return Ok(guid);
+            var guid = await _mediator.Send(new DeleteProfileCommand
+            {
+                UserId = id
+            });
+            return Ok(guid);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound("Profile not found");
+        }
+
     }
 }

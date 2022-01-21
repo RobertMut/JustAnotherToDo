@@ -1,4 +1,5 @@
-﻿using JustAnotherToDo.Application.Common.Interfaces;
+﻿using JustAnotherToDo.Application.Common.Exceptions;
+using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Application.Profiles.Queries.GetProfileDetail;
 using JustAnotherToDo.Application.Todos.Commands.CreateTodo;
 using JustAnotherToDo.Application.Todos.Commands.DeleteTodo;
@@ -55,17 +56,33 @@ public class ToDoController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> UpdateTodo(UpdateTodoCommand command)
     {
-        var guid = await _mediator.Send(command);
-        return Ok(guid);
+        try
+        {
+            var guid = await _mediator.Send(command);
+            return Ok(guid);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound("Invalid id");
+        }
+
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var guid = await _mediator.Send(new DeleteTodoCommand
+        try
         {
-            Id = id
-        });
-        return Ok(guid);
+            var guid = await _mediator.Send(new DeleteTodoCommand
+            {
+                Id = id
+            });
+            return Ok(guid);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound("Todo not found");
+        }
+
     }
 }

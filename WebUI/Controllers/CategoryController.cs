@@ -2,6 +2,7 @@
 using JustAnotherToDo.Application.Categories.Commands.DeleteCategory;
 using JustAnotherToDo.Application.Categories.Commands.UpdateCategory;
 using JustAnotherToDo.Application.Categories.Queries.GetUserCategoriesList;
+using JustAnotherToDo.Application.Common.Exceptions;
 using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Application.Profiles.Queries.GetProfileDetail;
 using MediatR;
@@ -54,17 +55,34 @@ public class CategoryController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> UpdateCategory(UpdateCategoryCommand command)
     {
-        var guid = await _mediator.Send(command);
-        return Ok(guid);
+        try
+        {
+            var guid = await _mediator.Send(command);
+            return Ok(guid);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound("Invalid id");
+        }
+        
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCategory(Guid id)
     {
-        var guid = await _mediator.Send(new DeleteCategoryCommand
+        try
         {
-            Id = id
-        });
-        return Ok(guid);
+            var guid = await _mediator.Send(new DeleteCategoryCommand
+            {
+                Id = id
+            });
+            return Ok(guid);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound("Category not found");
+        }
+
+
     }
 }

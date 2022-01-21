@@ -18,7 +18,7 @@ namespace JustAnotherToDo.Infrastructure.Identity
         public async Task<Guid> CreateUserAsync(string userName, string password, CancellationToken ct)
         {
             var searchUser = await _context.Profiles.FirstOrDefaultAsync(u => u.Username == userName);
-            if (searchUser != null) return Guid.Empty;
+            if (searchUser != null) throw new UserExistsException(nameof(UserProfile), userName);
             var user = new UserProfile()
             {
                 Username = userName,

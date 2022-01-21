@@ -1,4 +1,5 @@
-﻿using JustAnotherToDo.Application.Common.Interfaces;
+﻿using JustAnotherToDo.Application.Common.Exceptions;
+using JustAnotherToDo.Application.Common.Interfaces;
 using MediatR;
 
 namespace JustAnotherToDo.Application.Profiles.Commands.CreateProfile;
@@ -14,7 +15,16 @@ public class CreateProfileCommandHandler : IRequestHandler<CreateProfileCommand,
 
     public async Task<Guid> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
     {
-        var user = await _manager.CreateUserAsync(request.Username, request.Password, cancellationToken);
-        return user;
+        try
+        {
+            var user = await _manager.CreateUserAsync(request.Username, request.Password, cancellationToken);
+            return user;
+        }
+        catch (UserExistsException)
+        {
+            return Guid.Empty;
+        }
+        
+        
     }
 }

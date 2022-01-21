@@ -14,7 +14,15 @@ public class PaginatedList<T>
     {
         PageNumber = pageNumber;
         PageIndex = pageNumber - 1;
-        TotalPages = (int) Math.Ceiling(count / (decimal) pageSize);
+        try
+        {
+            TotalPages = (int) Math.Ceiling(count / (decimal) pageSize);
+        }
+        catch (DivideByZeroException)
+        {
+            TotalPages = 0;
+        }
+
         TotalCount = count;
         Items = items;
     }

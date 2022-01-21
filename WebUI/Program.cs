@@ -15,7 +15,7 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddHealthChecks().AddDbContextCheck<JustAnotherToDoDbContext>();
@@ -76,4 +76,7 @@ app.UseEndpoints(endpoints =>
 });
 app.Run();
 
-public partial class Program {}
+namespace WebUI
+{
+    public partial class Program {}
+}
