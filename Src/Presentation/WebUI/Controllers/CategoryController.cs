@@ -29,20 +29,15 @@ public class CategoryController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<UserCategoriesListVm>> GetUserCategories()
     {
-        var user = await _mediator.Send(new GetProfileDetailQuery
-        {
-            Username = _currentUser.UserName
-        });
-        if (user == null) return BadRequest("User does not exist");
         var categories = await _mediator.Send(new GetUserCategoriesListQuery
         {
-            ProfileId = user.Id
+            Username = _currentUser.UserName
         });
         return categories;
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostCategory(CreateCategoryCommand command)
+    public async Task<IActionResult> PostCategory([FromBody]CreateCategoryCommand command)
     {
         var user = await _mediator.Send(new GetProfileDetailQuery
         {
@@ -53,7 +48,7 @@ public class CategoryController : ControllerBase
         return Ok(guid);
     }
     [HttpPut]
-    public async Task<IActionResult> UpdateCategory(UpdateCategoryCommand command)
+    public async Task<IActionResult> UpdateCategory([FromBody]UpdateCategoryCommand command)
     {
         try
         {
@@ -68,21 +63,13 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCategory(Guid id)
+    public async Task<IActionResult> DeleteCategory([FromRoute]Guid id)
     {
-        try
-        {
+
             var guid = await _mediator.Send(new DeleteCategoryCommand
             {
                 Id = id
             });
             return Ok(guid);
-        }
-        catch (NotFoundException ex)
-        {
-            return NotFound("Category not found");
-        }
-
-
     }
 }

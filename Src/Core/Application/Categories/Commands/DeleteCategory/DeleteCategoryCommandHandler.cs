@@ -10,16 +10,16 @@ public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryComman
 {
     private readonly IJustAnotherToDoDbContext _context;
 
-    public DeleteCategoryCommandHandler(IJustAnotherToDoDbContext _context)
+    public DeleteCategoryCommandHandler(IJustAnotherToDoDbContext context)
     {
-        this._context = _context;
+        this._context = context;
     }
 
     public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Categories.SingleOrDefaultAsync(c => c.Id == request.Id);
+        var entity = await _context.Categories.SingleOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
         if (entity == null) throw new NotFoundException(nameof(Category), request.Id);
-        await _context.ToDos.Where(t => t.CategoryId == request.Id).ForEachAsync(t => t.CategoryId = null);
+        await _context.ToDos.Where(t => t.CategoryId == request.Id).ForEachAsync(t => t.CategoryId = null, cancellationToken);
         _context.Categories.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
         return Unit.Value;

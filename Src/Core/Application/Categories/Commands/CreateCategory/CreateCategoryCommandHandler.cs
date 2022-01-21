@@ -8,9 +8,9 @@ public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComman
 {
     private readonly IJustAnotherToDoDbContext _context;
 
-    public CreateCategoryCommandHandler(IJustAnotherToDoDbContext _context)
+    public CreateCategoryCommandHandler(IJustAnotherToDoDbContext context)
     {
-        this._context = _context;
+        this._context = context;
     }
 
     public async Task<Guid> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)

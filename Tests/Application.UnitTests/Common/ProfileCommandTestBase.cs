@@ -10,7 +10,7 @@ public class ProfileCommandTestBase
     public ProfileCommandTestBase()
     {
         Context = ApplicationContextFactory.Create();
-        Service = new UserManagerService(Context);
+        Service = new SqlUserManagerService(Context);
     }
 
 }

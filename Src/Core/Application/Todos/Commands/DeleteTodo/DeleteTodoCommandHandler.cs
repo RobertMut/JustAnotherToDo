@@ -9,9 +9,9 @@ public class DeleteTodoCommandHandler : IRequestHandler<DeleteTodoCommand>
 {
     private readonly IJustAnotherToDoDbContext _context;
 
-    public DeleteTodoCommandHandler(IJustAnotherToDoDbContext _context)
+    public DeleteTodoCommandHandler(IJustAnotherToDoDbContext context)
     {
-        this._context = _context;
+        this._context = context;
     }
 
     public async Task<Unit> Handle(DeleteTodoCommand request, CancellationToken cancellationToken)

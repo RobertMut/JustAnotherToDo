@@ -6,6 +6,6 @@ public class GetUserCategoriesListQueryValidator : AbstractValidator<GetUserCate
 {
     public GetUserCategoriesListQueryValidator()
     {
-        RuleFor(i => i.ProfileId).NotEmpty();
+        RuleFor(i => i.Username).NotEmpty();
     }
 }

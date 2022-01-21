@@ -4,5 +4,5 @@ namespace JustAnotherToDo.Application.Todos.Queries.GetUserTodosList;
 
 public class GetUserTodosListQuery : IRequest<UserTodosListVm>
 {
-    public Guid ProfileId { get; set; }   
+    public string Username { get; set; }   
 }

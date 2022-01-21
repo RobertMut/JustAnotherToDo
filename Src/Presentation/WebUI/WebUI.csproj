@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.22" />
@@ -40,6 +41,7 @@
 
   <ItemGroup>
     <Folder Include="Attributes\" />
+    <Folder Include="Filters\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
@@ -69,6 +71,6 @@
     </ItemGroup>
   </Target>
 	<ItemGroup>
-        <InternalsVisibleTo Include="JustAnotherToDo.WebUI.IntegrationTests"/>
+        <InternalsVisibleTo Include="JustAnotherToDo.WebUI.IntegrationTests" />
 	</ItemGroup>
 </Project>

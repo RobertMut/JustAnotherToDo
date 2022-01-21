@@ -7,6 +7,7 @@ using JustAnotherToDo.Infrastructure.Swagger.Filters;
 using JustAnotherToDo.Infrastructure.Swagger.Options;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IUserManager, UserManagerService>();
+        services.AddScoped<IUserManager, SqlUserManagerService>();
 
         services.AddDbContext<ApplicationDBContext>(opt =>
             opt.UseSqlServer(configuration.GetConnectionString("JustAnotherToDoDatabase")));
@@ -59,7 +60,7 @@ public static class DependencyInjection
                 bearer.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
-                    ValidAudiences = new []{"web_ui", "swagger_ui"},
+                    ValidAudiences = new[] { "web_ui", "swagger_ui" },
                     ValidateIssuer = true,
                     ValidateLifetime = true
                 };
@@ -135,25 +136,23 @@ public static class DependencyInjection
         using (var scope = host.CreateScope())
         {
             var services = scope.ServiceProvider;
-            var appContext = services.GetRequiredService<ApplicationDBContext>();
-            var user = await appContext.Profiles.FirstOrDefaultAsync(u => u.Username == "Administrator");
-            if (user == null)
+            try
             {
-                try
-                {
-                    var tContext = services.GetRequiredService<TContext>();
-                    tContext.Database.Migrate();
-                    var identityContext = services.GetRequiredService<TIdentityContext>();
-                    identityContext.Database.Migrate();
-                    var mediator = services.GetRequiredService<IMediator>();
-                    await mediator.Send(new SeedInitialDataCommand(), CancellationToken.None);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"{ex}\r\n{ex.StackTrace}");    
-                }
-            }
+                var appContext = services.GetRequiredService<ApplicationDBContext>();
+                var dbContext = services.GetRequiredService<TContext>();
+                var identityContext = services.GetRequiredService<TIdentityContext>();
+                var mediator = services.GetRequiredService<IMediator>();
+                dbContext.Database.Migrate();
+                identityContext.Database.Migrate();
 
+                var user = await appContext.Profiles.FirstOrDefaultAsync(u => u.Username == "Administrator");
+                if (user == null) await mediator.Send(new SeedInitialDataCommand(), CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex}\r\n{ex.StackTrace}");
+            }
         }
+
     }
 }

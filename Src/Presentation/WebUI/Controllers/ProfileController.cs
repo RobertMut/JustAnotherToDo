@@ -1,5 +1,6 @@
 ﻿using JustAnotherToDo.Application.Common.Exceptions;
 using JustAnotherToDo.Application.Common.Interfaces;
+using JustAnotherToDo.Application.Common.Wrappers;
 using JustAnotherToDo.Application.Models;
 using JustAnotherToDo.Application.Profiles.Commands.CreateProfile;
 using JustAnotherToDo.Application.Profiles.Commands.DeleteProfile;
@@ -32,46 +33,30 @@ public class ProfileController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<PaginatedList<ProfilesDto>>> GetProfileList([FromQuery] GetProfilesWithPaginationQuery query)
     {
-        var user = await _mediator.Send(new GetProfileDetailQuery
-        {
-            Username = _currentUser.UserName
-        });
-
-        if (user.AccessLevel != AccessLevel.Administrator) return StatusCode(401);
-        var paginatedProfiles = await _mediator.Send(query);
+        var request =
+            new ContextualRequest<GetProfilesWithPaginationQuery, PaginatedList<ProfilesDto>>(query,
+                _currentUser.UserName);
+        var paginatedProfiles = await _mediator.Send(request);
         if (paginatedProfiles.Items.Count == 0) return NotFound("Empty");
         return paginatedProfiles;
 
     }
 
     [HttpGet("profile")]
-    public async Task<ActionResult<ProfileDetailVm>> GetProfile([FromQuery] string? username)
+    public async Task<ActionResult<ProfileDetailVm>> GetProfile()
     {
         var user = await _mediator.Send(new GetProfileDetailQuery
         {
             Username = _currentUser.UserName
         });
-        if (user == null) return BadRequest("User does not exist");
-        if (user.AccessLevel != AccessLevel.Administrator && user.Username != username) return StatusCode(401);
-        try
-        {
-            var profile = await _mediator.Send(new GetProfileDetailQuery
-            {
-                Username = user.Username
-            });
-            return profile;
-        }
-        catch (NotFoundException)
-        {
-            return NotFound("User not found!");
-        }
 
+        return user;
 
     }
     [AllowAnonymous]
     [SecurityHeaders]
     [HttpPost]
-    public async Task<IActionResult> PostProfile(CreateProfileCommand command)
+    public async Task<IActionResult> PostProfile([FromBody]CreateProfileCommand command)
     {
         var guid = await _mediator.Send(command);
         if (guid == Guid.Empty) return BadRequest("User exists");
@@ -79,33 +64,24 @@ public class ProfileController : ControllerBase
     }
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPut]
-    public async Task<IActionResult> UpdateProfile(UpdateProfileCommand command)
+    public async Task<IActionResult> UpdateProfile([FromBody]UpdateProfileCommand command)
     {
-        try
-        {
-            var guid = await _mediator.Send(command);
-            return Ok(guid);
-        }
-        catch (NotFoundException)
-        {
-            return NotFound("Invalid id");
-        }
+
+        var guid = await _mediator.Send(command);
+        return Ok(guid);
+
     }
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteProfile(Guid id)
+    public async Task<IActionResult> DeleteProfile([FromRoute]Guid id)
     {
-        try
+
+
+        var guid = await _mediator.Send(new DeleteProfileCommand
         {
-            var guid = await _mediator.Send(new DeleteProfileCommand
-            {
-                UserId = id
-            });
-            return Ok(guid);
-        }
-        catch (NotFoundException)
-        {
-            return NotFound("Profile not found");
-        }
+            UserId = id
+        });
+        return Ok(guid);
+
 
     }
 }

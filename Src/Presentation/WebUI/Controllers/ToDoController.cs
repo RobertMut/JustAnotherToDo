@@ -30,20 +30,15 @@ public class ToDoController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<UserTodosListVm>> GetUserToDos()
     {
-        var user = await _mediator.Send(new GetProfileDetailQuery
-        {
-            Username = _currentUser.UserName
-        });
-        if (user == null) return BadRequest("User does not exist");
         var todos = await _mediator.Send(new GetUserTodosListQuery
         {
-            ProfileId = user.Id
+            Username = _currentUser.UserName
         });
         return todos;
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostTodo(CreateTodoCommand command)
+    public async Task<IActionResult> PostTodo([FromBody]CreateTodoCommand command)
     {
         var user = await _mediator.Send(new GetProfileDetailQuery
         {
@@ -54,35 +49,24 @@ public class ToDoController : ControllerBase
         return Ok(guid);
     }
     [HttpPut]
-    public async Task<IActionResult> UpdateTodo(UpdateTodoCommand command)
+    public async Task<IActionResult> UpdateTodo([FromBody]UpdateTodoCommand command)
     {
-        try
-        {
-            var guid = await _mediator.Send(command);
-            return Ok(guid);
-        }
-        catch (NotFoundException)
-        {
-            return NotFound("Invalid id");
-        }
+        var guid = await _mediator.Send(command);
+        return Ok(guid);
+
 
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete([FromRoute]Guid id)
     {
-        try
+
+        var guid = await _mediator.Send(new DeleteTodoCommand
         {
-            var guid = await _mediator.Send(new DeleteTodoCommand
-            {
-                Id = id
-            });
-            return Ok(guid);
-        }
-        catch (NotFoundException)
-        {
-            return NotFound("Todo not found");
-        }
+            Id = id
+        });
+        return Ok(guid);
+
 
     }
 }

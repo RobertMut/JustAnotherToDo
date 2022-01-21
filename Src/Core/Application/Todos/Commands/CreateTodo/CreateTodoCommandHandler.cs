@@ -8,9 +8,9 @@ public class CreateTodoCommandHandler : IRequestHandler<CreateTodoCommand, Guid>
 {
     private readonly IJustAnotherToDoDbContext _context;
 
-    public CreateTodoCommandHandler(IJustAnotherToDoDbContext _context)
+    public CreateTodoCommandHandler(IJustAnotherToDoDbContext context)
     {
-        this._context = _context;
+        this._context = context;
     }
 
     public async Task<Guid> Handle(CreateTodoCommand request, CancellationToken cancellationToken)

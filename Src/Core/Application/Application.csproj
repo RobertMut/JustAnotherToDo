@@ -26,7 +26,7 @@
     <Folder Include="Common\Mappings\" />
     <Folder Include="Common\Behaviours\" />
     <Folder Include="Common\Extensions\" />
-    <Folder Include="Profiles\Queries\GetProfilesList\" />
+    <Folder Include="Common\Wrappers\" />
     <Folder Include="Profiles\Queries\GetProfileDetail\" />
     <Folder Include="Profiles\Queries\GetProfilesWithPagination\" />
     <Folder Include="System\Commands\InitialData\" />

@@ -15,16 +15,7 @@ public class CreateProfileCommandHandler : IRequestHandler<CreateProfileCommand,
 
     public async Task<Guid> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var user = await _manager.CreateUserAsync(request.Username, request.Password, cancellationToken);
+        var user = await _manager.CreateUserAsync(request.Username, request.Password, cancellationToken);
             return user;
-        }
-        catch (UserExistsException)
-        {
-            return Guid.Empty;
-        }
-        
-        
     }
 }

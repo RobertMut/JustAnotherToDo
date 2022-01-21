@@ -1,9 +1,11 @@
+using FluentValidation.AspNetCore;
 using JustAnotherToDo.Application;
 using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Infrastructure;
 using JustAnotherToDo.Infrastructure.Identity;
 using JustAnotherToDo.Infrastructure.Swagger;
 using JustAnotherToDo.Persistence;
+using WebUI.Filters;
 using WebUI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,11 +25,8 @@ builder.Services.AddHealthChecks().AddDbContextCheck<ApplicationDBContext>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMvc(opt =>
     {
-        //var policy = new AuthorizationPolicyBuilder()
-        //    .RequireAuthenticatedUser()
-        //    .RequireScope("api").Build();
-        //opt.Filters.Add(new AuthorizeFilter(policy));
-    })
+        opt.Filters.Add<ApiExceptionFilterAttribute>();
+    }).AddFluentValidation(x => x.AutomaticValidationEnabled = false)
     .AddNewtonsoftJson();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddCors();

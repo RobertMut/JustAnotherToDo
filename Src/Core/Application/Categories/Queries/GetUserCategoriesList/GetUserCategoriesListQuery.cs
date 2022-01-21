@@ -4,5 +4,5 @@ namespace JustAnotherToDo.Application.Categories.Queries.GetUserCategoriesList;
 
 public class GetUserCategoriesListQuery : IRequest<UserCategoriesListVm>
 {
-    public Guid ProfileId { get; set; }
+    public string Username { get; set; }
 }

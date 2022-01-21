@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using JustAnotherToDo.Application.Common.Wrappers;
 using JustAnotherToDo.Application.Models;
 using JustAnotherToDo.Application.Profiles.Queries.GetProfileDetail;
 using JustAnotherToDo.Application.Profiles.Queries.GetProfilesWithPagination;
@@ -15,7 +16,8 @@ public class GetProfilesWithPaginationQueryHandlerTests : QueriesTestFixture
     public async Task GetPagedProfiles()
     {
         var handler = new GetProfilesWithPaginationQueryHandler(ApplicationContext, Mapper);
-        var result = await handler.Handle(new GetProfilesWithPaginationQuery(), CancellationToken.None);
+        var result = await handler.Handle(new ContextualRequest<GetProfilesWithPaginationQuery, PaginatedList<ProfilesDto>>(
+            new GetProfilesWithPaginationQuery(), "TestUser"), CancellationToken.None);
         Assert.IsInstanceOf(typeof(PaginatedList<ProfilesDto>), result);
         Assert.IsTrue(result.TotalCount == 3);
     }

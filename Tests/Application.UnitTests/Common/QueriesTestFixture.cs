@@ -19,7 +19,7 @@ public class QueriesTestFixture : IDisposable
     {
         
         ApplicationContext = ApplicationContextFactory.Create();
-        Service = new UserManagerService(ApplicationContext);
+        Service = new SqlUserManagerService(ApplicationContext);
         Context = JustAnotherToDoContextFactory.Create();
         var configurationProvider = new MapperConfiguration(cfg =>
         {
