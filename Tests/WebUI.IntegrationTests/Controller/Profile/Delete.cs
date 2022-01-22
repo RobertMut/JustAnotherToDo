@@ -3,22 +3,23 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Profile;
 
-public class Delete : IClassFixture<CustomWebApplicationFactory<ProfileController>>
+public class Delete
 {
     private CustomWebApplicationFactory<ProfileController> _factory;
     private HttpClient _client;
-    public Delete(CustomWebApplicationFactory<ProfileController> factory)
+    [SetUp]
+    public async Task SetUp()
     {
-        _factory = factory;
-        _client = _factory.GetAuthenticatedClient().Result;
+        _factory = new CustomWebApplicationFactory<ProfileController>();
+        _client = await _factory.GetAuthenticatedClient();
     }
 
-    [Fact]
+    [Test]
     public async Task SuccessfullyDeletesProfile()
     {
 
@@ -27,20 +28,20 @@ public class Delete : IClassFixture<CustomWebApplicationFactory<ProfileControlle
         response.EnsureSuccessStatusCode();
 
     }
-    [Fact]
+    [Test]
     public async Task NotFoundProfile()
     {
        
         var response = await _client
             .DeleteAsync($"api/Profile/{Guid.NewGuid()}");
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
     }
-    [Fact]
+    [Test]
     public async Task AnonymousCantDelete()
     {
         var response = await _factory.CreateClient()
             .DeleteAsync($"api/Profile/{Guid.NewGuid()}");
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }

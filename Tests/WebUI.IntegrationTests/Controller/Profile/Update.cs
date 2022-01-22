@@ -5,22 +5,22 @@ using System.Threading.Tasks;
 using JustAnotherToDo.Application.Profiles.Commands.UpdateProfile;
 using JustAnotherToDo.Domain.Enums;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Profile;
 
-public class Update : IClassFixture<CustomWebApplicationFactory<ProfileController>>
+public class Update
 {
     private CustomWebApplicationFactory<ProfileController> _factory;
     private HttpClient _client;
-    private readonly StringContent _profile;
+    private StringContent _profile;
 
-    public Update(CustomWebApplicationFactory<ProfileController> factory)
+    [SetUp]
+    public async Task SetUp()
     {
-        _factory = factory;
-        _client = _factory.GetAuthenticatedClient().Result;
-        
+        _factory = new CustomWebApplicationFactory<ProfileController>();
+        _client = await _factory.GetAuthenticatedClient();
         _profile = Utilities.GetRequestContent(new UpdateProfileCommand
         {
             UserId = Utilities.TestUserId,
@@ -29,7 +29,7 @@ public class Update : IClassFixture<CustomWebApplicationFactory<ProfileControlle
             AccessLevel = AccessLevel.Administrator
         });
     }
-    [Fact]
+    [Test]
     public async Task SuccessfullyUpdatesProfile()
     {
         var response = await _client
@@ -37,7 +37,7 @@ public class Update : IClassFixture<CustomWebApplicationFactory<ProfileControlle
         response.EnsureSuccessStatusCode();
 
     }
-    [Fact]
+    [Test]
     public async Task WrongIdProfileUpdate()
     {
         var profile = new UpdateProfileCommand
@@ -50,15 +50,15 @@ public class Update : IClassFixture<CustomWebApplicationFactory<ProfileControlle
         var content = Utilities.GetRequestContent(profile);
         var response = await _client
             .PutAsync($"api/Profile", content);
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
     }
-    [Fact]
+    [Test]
     public async Task AnonymousCantUpdate()
     {
         var client = _factory.CreateClient();
         var response = await client
             .PutAsync($"api/Profile", _profile);
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }

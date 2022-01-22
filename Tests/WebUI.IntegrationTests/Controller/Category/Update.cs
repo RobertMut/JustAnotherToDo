@@ -4,37 +4,38 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using JustAnotherToDo.Application.Categories.Commands.UpdateCategory;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Category;
 
-public class Update : IClassFixture<CustomWebApplicationFactory<CategoryController>>
+public class Update
 {
     private CustomWebApplicationFactory<CategoryController> _factory;
     private HttpClient _client;
-    private StringContent _category;
-    public Update(CustomWebApplicationFactory<CategoryController> factory)
+    [SetUp]
+    public async Task SetUp()
     {
-        _factory = factory;
-        _client = _factory.GetAuthenticatedClient().Result;
-        _category = Utilities.GetRequestContent(new UpdateCategoryCommand
+        _factory = new CustomWebApplicationFactory<CategoryController>();
+        _client = await _factory.GetAuthenticatedClient();
+
+    }
+    [Test]
+    public async Task SuccessfullyUpdatesCategory()
+    {
+        var category = Utilities.GetRequestContent(new UpdateCategoryCommand
         {
-            Id = Utilities.CategoryId,
+            Id = Utilities.Category2Id,
             Name = "Not important",
             Color = "#00FF00"
         });
-    }
-    [Fact]
-    public async Task SuccessfullyUpdatesCategory()
-    {
-
         var response = await _client
-            .PutAsync($"api/Category", _category);
+            .PutAsync($"api/Category", category);
+        Console.WriteLine("TEST");
         response.EnsureSuccessStatusCode();
 
     }
-    [Fact]
+    [Test]
     public async Task WrongIdCategoryUpdate()
     {
         var category = new UpdateCategoryCommand
@@ -46,15 +47,21 @@ public class Update : IClassFixture<CustomWebApplicationFactory<CategoryControll
         var content = Utilities.GetRequestContent(category);
         var response = await _client
             .PutAsync($"api/Category", content);
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
     }
-    [Fact]
+    [Test]
     public async Task AnonymousCantUpdate()
     {
+        var category = Utilities.GetRequestContent(new UpdateCategoryCommand
+        {
+            Id = Utilities.CategoryId,
+            Name = "Not important",
+            Color = "#00FF00"
+        });
         var client = _factory.CreateClient();
         var response = await client
-            .PutAsync($"api/Category", _category);
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            .PutAsync($"api/Category", category);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }

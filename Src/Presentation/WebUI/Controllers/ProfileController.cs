@@ -37,7 +37,6 @@ public class ProfileController : ControllerBase
             new ContextualRequest<GetProfilesWithPaginationQuery, PaginatedList<ProfilesDto>>(query,
                 _currentUser.UserName);
         var paginatedProfiles = await _mediator.Send(request);
-        if (paginatedProfiles.Items.Count == 0) return NotFound("Empty");
         return paginatedProfiles;
 
     }
@@ -59,7 +58,7 @@ public class ProfileController : ControllerBase
     public async Task<IActionResult> PostProfile([FromBody]CreateProfileCommand command)
     {
         var guid = await _mediator.Send(command);
-        if (guid == Guid.Empty) return BadRequest("User exists");
+
         return Ok(guid);
     }
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

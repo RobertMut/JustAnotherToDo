@@ -15,7 +15,7 @@ namespace JustAnotherToDo.Infrastructure.Identity
             _context = context;
         }
 
-        public async Task<Guid> CreateUserAsync(string userName, string password, CancellationToken ct)
+        public async Task<Guid> CreateUserAsync(string userName, string password,AccessLevel permissions, CancellationToken ct)
         {
             var searchUser = await _context.Profiles.FirstOrDefaultAsync(u => u.Username == userName, ct);
             if (searchUser != null) throw new UserExistsException(nameof(UserProfile), userName);
@@ -23,7 +23,7 @@ namespace JustAnotherToDo.Infrastructure.Identity
             {
                 Username = userName,
                 Password = password,
-                AccessLevel = AccessLevel.User
+                AccessLevel = permissions
             };
             var entity = await _context.Profiles.AddAsync(user, ct);
             await _context.SaveChangesAsync(ct);

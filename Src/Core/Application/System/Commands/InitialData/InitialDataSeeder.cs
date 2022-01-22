@@ -24,14 +24,9 @@ public class InitialDataSeeder
 
     public async Task SeedUser(CancellationToken cancellationToken)
     {
-        var user = new UserProfile
-        {
-            Username = "Administrator",
-            Password = "1234",
-            AccessLevel = AccessLevel.Administrator,
 
-        };
-        await _manager.CreateUserAsync("Administrator", "1234", cancellationToken);
+        await _manager.CreateUserAsync("Administrator", "1234",AccessLevel.Administrator, cancellationToken);
+
     }
 
     public async Task SeedCategory(CancellationToken cancellationToken)

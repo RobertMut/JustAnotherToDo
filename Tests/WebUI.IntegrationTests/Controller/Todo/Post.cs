@@ -4,19 +4,20 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using JustAnotherToDo.Application.Todos.Commands.CreateTodo;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Todo;
 
-public class Post : IClassFixture<CustomWebApplicationFactory<ToDoController>>
+public class Post 
 {
     private CustomWebApplicationFactory<ToDoController> _factory;
-    private readonly StringContent _todo;
+    private StringContent _todo;
 
-    public Post(CustomWebApplicationFactory<ToDoController> factory)
+    [SetUp]
+    public async Task SetUp()
     {
-        _factory = factory;
+        _factory = new CustomWebApplicationFactory<ToDoController>();
         _todo = Utilities.GetRequestContent(new CreateTodoCommand
         {
             Name = "New todo",
@@ -25,7 +26,7 @@ public class Post : IClassFixture<CustomWebApplicationFactory<ToDoController>>
         });
     }
 
-    [Fact]
+    [Test]
     public async Task ShouldPostNewTodo()
     {
         var client = await _factory.GetAuthenticatedClient();
@@ -33,11 +34,11 @@ public class Post : IClassFixture<CustomWebApplicationFactory<ToDoController>>
         var response = await client.PostAsync("api/Todo", _todo);
         response.EnsureSuccessStatusCode();
     }
-    [Fact]
+    [Test]
     public async Task AnonymousCantPost()
     {
         var client = _factory.CreateClient();
         var response = await client.PostAsync("api/Todo", _todo);
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }

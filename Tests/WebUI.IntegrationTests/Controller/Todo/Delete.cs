@@ -3,22 +3,23 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Todo;
 
-public class Delete : IClassFixture<CustomWebApplicationFactory<ToDoController>>
+public class Delete
 {
     private CustomWebApplicationFactory<ToDoController> _factory;
     private HttpClient _client;
-    public Delete(CustomWebApplicationFactory<ToDoController> factory)
+    [SetUp]
+    public async Task SetUp()
     {
-        _factory = factory;
-        _client = _factory.GetAuthenticatedClient().Result;
+        _factory = new CustomWebApplicationFactory<ToDoController>();
+        _client = await _factory.GetAuthenticatedClient();
     }
 
-    [Fact]
+    [Test]
     public async Task SuccessfullyDeletesTodo()
     {
         
@@ -27,22 +28,22 @@ public class Delete : IClassFixture<CustomWebApplicationFactory<ToDoController>>
         response.EnsureSuccessStatusCode();
 
     }
-    [Fact]
+    [Test]
     public async Task NotFoundTodo()
     {
        
         var response = await _client
             .DeleteAsync($"api/Todo/{Guid.NewGuid()}");
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
     }
-    [Fact]
+    [Test]
     public async Task AnonymousCantDelete()
     {
 
         var response = await _factory.CreateClient()
             .DeleteAsync($"api/ToDo/{Utilities.ToDoId}");
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
 
     }
 }

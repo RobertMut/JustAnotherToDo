@@ -3,22 +3,24 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
+
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Category;
 
-public class Delete : IClassFixture<CustomWebApplicationFactory<CategoryController>>
+public class Delete 
 {
     private CustomWebApplicationFactory<CategoryController> _factory;
     private HttpClient _client;
-    public Delete(CustomWebApplicationFactory<CategoryController> factory)
-    {
-        _factory = factory;
-        _client = _factory.GetAuthenticatedClient().Result;
-    }
 
-    [Fact]
+    [SetUp]
+    public async Task SetUp()
+    {
+        _factory = new CustomWebApplicationFactory<CategoryController>();
+        _client = await _factory.GetAuthenticatedClient();
+    }
+    [Test]
     public async Task SuccessfullyDeletesCategory()
     {
 
@@ -27,22 +29,22 @@ public class Delete : IClassFixture<CustomWebApplicationFactory<CategoryControll
         response.EnsureSuccessStatusCode();
 
     }
-    [Fact]
+    [Test]
     public async Task NotFoundCategory()
     {
        
         var response = await _client
             .DeleteAsync($"api/Category/{Guid.NewGuid()}");
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
     }
-    [Fact]
+    [Test]
     public async Task AnonymousCantDelete()
     {
 
         var response = await _factory.CreateClient()
             .DeleteAsync($"api/Category/{Utilities.CategoryId}");
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
 
     }
 }

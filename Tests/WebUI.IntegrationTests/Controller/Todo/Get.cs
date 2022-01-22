@@ -2,34 +2,37 @@
 using System.Threading.Tasks;
 using JustAnotherToDo.Application.Todos.Queries.GetUserTodosList;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
+
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Todo;
 
-public class Get : IClassFixture<CustomWebApplicationFactory<ToDoController>>
+public class Get 
 {
     private CustomWebApplicationFactory<ToDoController> _factory;
-    public Get(CustomWebApplicationFactory<ToDoController> factory)
+
+    [SetUp]
+    public void SetUp()
     {
-        _factory = factory;
+        _factory = new CustomWebApplicationFactory<ToDoController>();
     }
 
-    [Fact]
+    [Test]
     public async Task ReturnsUserTodos()
     {
         var client = await _factory.GetAuthenticatedClient();
         var response = await client.GetAsync("api/Todo");
         response.EnsureSuccessStatusCode();
         var vm = await Utilities.GetResponseContent<UserTodosListVm>(response);
-        Assert.IsType<UserTodosListVm>(vm);
-        Assert.NotEmpty(vm.Todos);
+        Assert.IsInstanceOf<UserTodosListVm>(vm);
+        Assert.NotNull(vm.Todos);
     }
-    [Fact]
+    [Test]
     public async Task AnonymousCantGet()
     {
         var client = _factory.CreateClient();
         var response = await client.GetAsync("api/ToDo");
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }

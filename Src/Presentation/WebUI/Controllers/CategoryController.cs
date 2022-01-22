@@ -37,7 +37,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostCategory([FromBody]CreateCategoryCommand command)
+    public async Task<IActionResult> PostCategory([FromBody] CreateCategoryCommand command)
     {
         var user = await _mediator.Send(new GetProfileDetailQuery
         {
@@ -48,28 +48,22 @@ public class CategoryController : ControllerBase
         return Ok(guid);
     }
     [HttpPut]
-    public async Task<IActionResult> UpdateCategory([FromBody]UpdateCategoryCommand command)
+    public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryCommand command)
     {
-        try
-        {
-            var guid = await _mediator.Send(command);
-            return Ok(guid);
-        }
-        catch (NotFoundException)
-        {
-            return NotFound("Invalid id");
-        }
-        
+
+        var guid = await _mediator.Send(command);
+        return Ok(guid);
+
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCategory([FromRoute]Guid id)
+    public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
     {
 
-            var guid = await _mediator.Send(new DeleteCategoryCommand
-            {
-                Id = id
-            });
-            return Ok(guid);
+        var guid = await _mediator.Send(new DeleteCategoryCommand
+        {
+            Id = id
+        });
+        return Ok(guid);
     }
 }

@@ -2,34 +2,35 @@
 using System.Threading.Tasks;
 using JustAnotherToDo.Application.Categories.Queries.GetUserCategoriesList;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Category;
 
-public class Get : IClassFixture<CustomWebApplicationFactory<CategoryController>>
+public class Get 
 {
     private CustomWebApplicationFactory<CategoryController> _factory;
-    public Get(CustomWebApplicationFactory<CategoryController> factory)
+    [SetUp]
+    public void SetUp()
     {
-        _factory = factory;
+        _factory = new CustomWebApplicationFactory<CategoryController>();
     }
 
-    [Fact]
+    [Test]
     public async Task ReturnsUserCategories()
     {
         var client = await _factory.GetAuthenticatedClient();
         var response = await client.GetAsync("api/Category");
         response.EnsureSuccessStatusCode();
         var vm = await Utilities.GetResponseContent<UserCategoriesListVm>(response);
-        Assert.IsType<UserCategoriesListVm>(vm);
-        Assert.NotEmpty(vm.Categories);
+        Assert.IsInstanceOf<UserCategoriesListVm>(vm);
+        Assert.NotNull(vm.Categories);
     }
-    [Fact]
+    [Test]
     public async Task AnonymousCantGet()
     {
         var client = _factory.CreateClient();
         var response = await client.GetAsync("api/Category");
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }

@@ -2,42 +2,44 @@
 using System.Threading.Tasks;
 using JustAnotherToDo.Application.Profiles.Queries.GetProfileDetail;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Profile;
 
-public class GetProfile : IClassFixture<CustomWebApplicationFactory<ProfileController>>
+public class GetProfile
 {
     private CustomWebApplicationFactory<ProfileController> _factory;
-    public GetProfile(CustomWebApplicationFactory<ProfileController> factory)
+    [SetUp]
+    public void SetUp()
     {
-        _factory = factory;
+        _factory = new CustomWebApplicationFactory<ProfileController>();
+
     }
 
-    [Fact]
+    [Test]
     public async Task ReturnsLoggedUser()
     {
         var client = await _factory.GetAuthenticatedClient();
         var response = await client.GetAsync("api/Profile/profile");
         response.EnsureSuccessStatusCode();
         var vm = await Utilities.GetResponseContent<ProfileDetailVm>(response);
-        Assert.IsType<ProfileDetailVm>(vm);
+        Assert.IsInstanceOf<ProfileDetailVm>(vm);
         Assert.NotNull(vm.Username);
     }
     //Deleted
-    //[Fact]
+    //[Test]
     //public async Task GetNonExistingUser()
     //{
     //    var client = await _factory.GetAuthenticatedClient();
     //    var response = await client.GetAsync("api/Profile/profile?NonExistingUser");
     //    Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     //}
-    [Fact]
+    [Test]
     public async Task AnonymousCantGet()
     {
         var client = _factory.CreateClient();
         var response = await client.GetAsync("api/Profile/profile");
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }

@@ -4,21 +4,21 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using JustAnotherToDo.Application.Todos.Commands.UpdateTodo;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Todo;
 
-public class Update : IClassFixture<CustomWebApplicationFactory<ToDoController>>
+public class Update
 {
     private CustomWebApplicationFactory<ToDoController> _factory;
     private HttpClient _client;
-    private readonly StringContent _todo;
-
-    public Update(CustomWebApplicationFactory<ToDoController> factory)
+    private StringContent _todo;
+    [SetUp]
+    public async Task SetUp()
     {
-        _factory = factory;
-        _client = _factory.GetAuthenticatedClient().Result;
+        _factory = new CustomWebApplicationFactory<ToDoController>();
+        _client = await _factory.GetAuthenticatedClient();
         _todo = Utilities.GetRequestContent(new UpdateTodoCommand
         {
             Id = Utilities.ToDo2Id,
@@ -27,7 +27,7 @@ public class Update : IClassFixture<CustomWebApplicationFactory<ToDoController>>
             CategoryId = Utilities.CategoryId
         });
     }
-    [Fact]
+    [Test]
     public async Task SuccessfullyUpdatesTodo()
     {
         var response = await _client
@@ -35,7 +35,7 @@ public class Update : IClassFixture<CustomWebApplicationFactory<ToDoController>>
         response.EnsureSuccessStatusCode();
 
     }
-    [Fact]
+    [Test]
     public async Task WrongIdTodoUpdate()
     {
         var todo = new UpdateTodoCommand
@@ -49,15 +49,15 @@ public class Update : IClassFixture<CustomWebApplicationFactory<ToDoController>>
         var content = Utilities.GetRequestContent(todo);
         var response = await _client
             .PutAsync($"api/Todo", content);
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
     }
-    [Fact]
+    [Test]
     public async Task AnonymousCantUpdate()
     {
         var client = _factory.CreateClient();
         var response = await client
             .PutAsync($"api/Todo", _todo);
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }

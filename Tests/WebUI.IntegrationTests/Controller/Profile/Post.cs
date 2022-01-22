@@ -1,25 +1,24 @@
 ﻿using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using JustAnotherToDo.Application.Profiles.Commands.CreateProfile;
 using JustAnotherToDo.WebUI.IntegrationTests.Common;
-using SQLitePCL;
+using NUnit.Framework;
 using WebUI.Controllers;
-using Xunit;
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Controller.Profile;
 
-public class Post : IClassFixture<CustomWebApplicationFactory<ProfileController>>
+public class Post
 {
-    private readonly CustomWebApplicationFactory<ProfileController> _factory;
+    private CustomWebApplicationFactory<ProfileController> _factory;
 
-    public Post(CustomWebApplicationFactory<ProfileController> factory)
+    [SetUp]
+    public void SetUp()
     {
-        _factory = factory;
-        
+        _factory = new CustomWebApplicationFactory<ProfileController>();
+
     }
 
-    [Fact]
+    [Test]
     public async Task ShouldPostNewProfile()
     {
         var client = await _factory.GetAuthenticatedClient();
@@ -31,7 +30,7 @@ public class Post : IClassFixture<CustomWebApplicationFactory<ProfileController>
         var response = await client.PostAsync("api/Profile", profile);
         response.EnsureSuccessStatusCode();
     }
-    [Fact]
+    [Test]
     public async Task PostExistingUser()
     {
         var client = await _factory.GetAuthenticatedClient();
@@ -42,9 +41,9 @@ public class Post : IClassFixture<CustomWebApplicationFactory<ProfileController>
         };
         var content = Utilities.GetRequestContent(profile);
         var response = await client.PostAsync("api/Profile", content);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.AreEqual(HttpStatusCode.Conflict, response.StatusCode);
     }
-    [Fact]
+    [Test]
     public async Task AnonymousCanPost()
     {
         var client = _factory.CreateClient();
