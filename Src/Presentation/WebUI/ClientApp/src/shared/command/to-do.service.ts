@@ -23,20 +23,14 @@ export class ToDoService implements ITodoItems {
       responseType: 'text'
     });
   }
-  update(command: IUpdateToDoCommand): void {
-    this.http.put(this.base_url, command).subscribe({
-      error: (e) => {
-        this.auth.canActivate()
-        console.error(e)
-      }
+  update(command: IUpdateToDoCommand): Observable<string> {
+    return this.http.put(this.base_url, command, {
+      responseType: "text"
     })
   }
-  delete(command: IDeleteToDoCommand): void {
-    this.http.delete(this.base_url + '/' + command.id).subscribe({
-      error: (e) => {
-        this.auth.canActivate()
-        console.error(e)
-      }
+  delete(command: IDeleteToDoCommand): Observable<string> {
+    return this.http.delete(this.base_url + '/' + command.id, {
+      responseType: 'text'
     });
   }
 }

@@ -7,6 +7,6 @@ import { IUpdateCategoryCommand } from "../entities/Category/iupdate-category-co
 export interface ICategoryItems {
     getCategories(): Observable<IGetCategoriesQuery>;
     create(command: ICreateCategoryCommand): Observable<string>;
-    update(command: IUpdateCategoryCommand): void;
-    delete(command: IDeleteCategoryCommand): void;
+    update(command: IUpdateCategoryCommand): Observable<string>;
+    delete(command: IDeleteCategoryCommand): Observable<string>;
 }

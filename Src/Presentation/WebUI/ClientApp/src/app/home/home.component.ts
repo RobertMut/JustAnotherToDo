@@ -13,6 +13,9 @@ import { IDeleteToDoCommand } from '../../shared/entities/ToDo/idelete-to-do-com
 import { IGetToDosQuery } from '../../shared/entities/ToDo/iget-to-dos-query';
 import { IToDo } from '../../shared/entities/ToDo/ito-do';
 import { IUpdateToDoCommand } from '../../shared/entities/ToDo/iupdate-to-do-command';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ThrowStmt } from '@angular/compiler';
+
 
 @Component({
   selector: 'app-home',
@@ -30,47 +33,69 @@ export class HomeComponent {
   color: any;
   constructor(private auth: AuthGuardService,
     private todoService: ToDoService,
-    private categoryService: CategoryService){
+    private categoryService: CategoryService,
+    private snackBar: MatSnackBar){
       this.getToDos();
       this.getCategories();
     }
     onAdd(addForm: any): void {
+      let date = null
+      if(addForm.endDate) date = new Date(addForm.endDate).toISOString()
       this.todoService.create({
         'name': addForm.name,
-        'endDate': new Date(addForm.endDate).toISOString(),
+        'endDate': date,
         'categoryId': addForm.categoryId,
       } as ICreateToDoCommand).subscribe({
         error: (e) => {
           this.auth.canActivate();
           console.error(e);
         },
-        complete: () => this.getToDos()
+        complete: () => {
+          this.getToDos()
+          this.openSnackBar("Created new To-Do!")
+        }
       })
       
     }
     onCategory(categoryForm: any): void{
-      console.warn(categoryForm.color)
       this.categoryService.create({
         'name': categoryForm.name,
         'color': this.color
       }as ICreateCategoryCommand).subscribe({
         error: (e) => {
-          this.auth.canActivate()
-          console.error(e)
+          this.auth.canActivate();
+          console.error(e);
         },
-        complete: () => this.getCategories()
+        complete: () =>{
+          this.getCategories();
+          this.openSnackBar("Created new category!");
+        } 
       });
     }
     delete(todo: any){
       this.todoService.delete({
         'id': todo.id
-      } as IDeleteToDoCommand)
+      } as IDeleteToDoCommand).subscribe({
+        error: (e) => {
+          this.auth.canActivate();
+          this.openSnackBar(e);
+          console.error(e);
+        },
+        complete: () => this.getToDos()
+      })
       todo.deleted = true;
     }
     deleteCategory(category: any){
       this.categoryService.delete({
         'id': category.id
-      } as IDeleteCategoryCommand);
+      } as IDeleteCategoryCommand).subscribe({
+        error: (e) => {
+          this.auth.canActivate()
+          this.openSnackBar(e)
+          console.error(e)
+        },
+        complete: () => this.getCategories()
+      });
       category.deleted = true;
     }
     edit(todo: any){
@@ -84,9 +109,19 @@ export class HomeComponent {
           'name': todo.name,
           'endTime': todo.endTime,
           'categoryId': todo.categoryId
-        } as IUpdateToDoCommand);
-        this.refresh();
+        } as IUpdateToDoCommand).subscribe({
+          error: (e) => {
+            this.auth.canActivate()
+            console.error(e)
+          },
+          complete: () => this.getToDos()
+        });
       }
+    }
+    visualChange(todo: any, category: any){
+        todo.categoryId = category.id
+        todo.color = category.color
+        todo.category = category.name
     }
     getCategories(){
       this.categoryService.getCategories().subscribe({
@@ -96,6 +131,7 @@ export class HomeComponent {
         },
         error: (err: any) =>{
           console.error(err);
+          
           this.auth.canActivate();
           }
         });
@@ -112,7 +148,7 @@ export class HomeComponent {
           }
         })
     }
-    refresh(){
-      location.reload();
+    openSnackBar(message: string){
+      this.snackBar.open(message, "OK!");
     }
 }

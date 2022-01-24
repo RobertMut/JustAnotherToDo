@@ -24,6 +24,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 //auth
 import {
   OAuthModule,
@@ -52,8 +53,10 @@ const MODULES = [
   MatExpansionModule,
   ColorPickerModule,
   MatToolbarModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatSnackBarModule
 ]
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,7 +65,8 @@ const MODULES = [
     AuthenticationComponent,
     OauthRedirectComponent,
     ProfilesComponent,
-    ProfileComponent
+    ProfileComponent,
+
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

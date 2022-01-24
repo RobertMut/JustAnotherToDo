@@ -29,10 +29,11 @@ public class GetUserTodosListQueryHandler : IRequestHandler<GetUserTodosListQuer
                               Name = t.Name,
                               CreationDate = t.CreationDate,
                               EndDate = t.EndDate,
+                              CategoryId = t.CategoryId,
                               Category = t.Category.Name,
                               Color = t.Category.Color,
                               ProfileId = t.ProfileId
-                          }).ToListAsync();
+                          }).ToListAsync(cancellationToken);
         var vm = new UserTodosListVm
         {
             Todos = join

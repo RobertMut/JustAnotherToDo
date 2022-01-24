@@ -7,6 +7,6 @@ import { IUpdateToDoCommand } from "../entities/ToDo/iupdate-to-do-command";
 export interface ITodoItems {
     getTodo(): Observable<IGetToDosQuery>;
     create(command: ICreateToDoCommand): Observable<string>;
-    update(command: IUpdateToDoCommand): void;
-    delete(command: IDeleteToDoCommand): void;
+    update(command: IUpdateToDoCommand): Observable<string>;
+    delete(command: IDeleteToDoCommand): Observable<string>;
 }

@@ -24,20 +24,14 @@ export class CategoryService implements ICategoryItems{
       responseType: 'text'
     });
   }
-  update(command: IUpdateCategoryCommand): void {
-    this.http.put(this.base_url, command).subscribe({
-      error: (e) => {
-        this.auth.canActivate()
-        console.error(e)
-      }
+  update(command: IUpdateCategoryCommand): Observable<string> {
+    return this.http.put(this.base_url, command, {
+      responseType: "text"
     })
   }
-  delete(command: IDeleteCategoryCommand): void {
-    this.http.delete(this.base_url+'/'+command.id).subscribe({
-      error: (e) => {
-        this.auth.canActivate()
-        console.error(e)
-      }
-    });
+  delete(command: IDeleteCategoryCommand): Observable<string> {
+    return this.http.delete(this.base_url+'/'+command.id,{
+      responseType: "text"
+    })
   }
 }

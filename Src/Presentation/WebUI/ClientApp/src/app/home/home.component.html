@@ -39,10 +39,6 @@
                     <button mat-button (click)="deleteCategory(category)">
                       <mat-icon>delete</mat-icon>
                     </button>
-                  <!--<div id="select-content">
-                    
-
-                  </div>-->
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -80,12 +76,12 @@
               <mat-label>To-do name</mat-label>
               <input matInput [(ngModel)]="element.name" type="text"/>
             </mat-form-field>
-            <p>{{element.category}}
+            <p>
               <mat-form-field *ngIf="element.canEdit">
                 <mat-label>Category</mat-label>
                 <mat-select name="categoryId" class="buttons" [(ngModel)]="element.categoryId">
                   <mat-option [value]="null"></mat-option>
-                  <mat-option *ngFor="let category of categories" [value]="category.id" [style.background]="category.color+'88'" [disabled]="category === null">{{category.name}}</mat-option>
+                  <mat-option *ngFor="let category of categories" [value]="category.id" [style.background]="category.color+'88'" [disabled]="category === null" (click)="visualChange(element, category)">{{category.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </p>
