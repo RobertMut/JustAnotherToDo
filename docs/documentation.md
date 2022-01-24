@@ -11,10 +11,10 @@ Project uses standard configuration files for ASP.NET and one additional (angula
 }
 ```
 ### Controllers
-[TodoController](https://i.imgur.com/comDN37.png)
-[ProfileController](https://i.imgur.com/AiZWgvy.png)
-[CategoryController](https://i.imgur.com/5X4drfU.png)
+![TodoController](https://i.imgur.com/comDN37.png)
+![ProfileController](https://i.imgur.com/AiZWgvy.png)
+![CategoryController](https://i.imgur.com/5X4drfU.png)
 ### UseCase
-[UseCase](https://i.imgur.com/486QaZF.png)
+![UseCase](https://i.imgur.com/486QaZF.png)
 ### Mediator with Generalization
-[Mediator](https://i.imgur.com/CAMRGIB.png)
+![Mediator](https://i.imgur.com/CAMRGIB.png)
