@@ -40,9 +40,13 @@ export class HomeComponent {
         'endDate': new Date(addForm.endDate).toISOString(),
         'categoryId': addForm.categoryId,
       } as ICreateToDoCommand).subscribe({
-        next: (v) => console.warn(v)
+        error: (e) => {
+          this.auth.canActivate();
+          console.error(e);
+        },
+        complete: () => this.getToDos()
       })
-      this.refresh();
+      
     }
     onCategory(categoryForm: any): void{
       console.warn(categoryForm.color)
@@ -54,8 +58,8 @@ export class HomeComponent {
           this.auth.canActivate()
           console.error(e)
         },
-        complete: () => this.refresh()
-      })
+        complete: () => this.getCategories()
+      });
     }
     delete(todo: any){
       this.todoService.delete({
