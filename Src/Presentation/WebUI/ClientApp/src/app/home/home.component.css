@@ -80,3 +80,15 @@ form {
 #category-submit {
     height: max-content;
 }
+.mat-tab-group{
+    width:70%;
+    margin: 0 auto;
+}
+.mat-tab-labels{
+    justify-content: space-around;
+}
+.mat-ripple{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}

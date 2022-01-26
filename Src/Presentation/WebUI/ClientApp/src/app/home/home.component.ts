@@ -1,6 +1,5 @@
 import { CdkColumnDef } from '@angular/cdk/table';
 import { Component } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { AuthGuardService } from '../../shared/auth/auth.guard.service';
 import { CategoryService } from '../../shared/command/category.service';
 import { ToDoService } from '../../shared/command/to-do.service';
@@ -14,7 +13,6 @@ import { IGetToDosQuery } from '../../shared/entities/ToDo/iget-to-dos-query';
 import { IToDo } from '../../shared/entities/ToDo/ito-do';
 import { IUpdateToDoCommand } from '../../shared/entities/ToDo/iupdate-to-do-command';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ThrowStmt } from '@angular/compiler';
 
 
 @Component({
@@ -26,6 +24,7 @@ import { ThrowStmt } from '@angular/compiler';
 export class HomeComponent {
 
   displayedColumns: string[] = ['name']
+  displayedCategoriesColumn: string[] = ['name']
   dataSource!: IToDo[];
   categories!: ICategory[];
   todoLoaded: boolean = false;
@@ -48,6 +47,7 @@ export class HomeComponent {
       } as ICreateToDoCommand).subscribe({
         error: (e) => {
           this.auth.canActivate();
+          this.openSnackBar("ERROR! Could not create a new To-Do!")
           console.error(e);
         },
         complete: () => {
@@ -64,6 +64,7 @@ export class HomeComponent {
       }as ICreateCategoryCommand).subscribe({
         error: (e) => {
           this.auth.canActivate();
+          this.openSnackBar("ERROR! Could not create a new category!")
           console.error(e);
         },
         complete: () =>{
@@ -78,10 +79,13 @@ export class HomeComponent {
       } as IDeleteToDoCommand).subscribe({
         error: (e) => {
           this.auth.canActivate();
-          this.openSnackBar(e);
+          this.openSnackBar("ERROR! Try again!");
           console.error(e);
         },
-        complete: () => this.getToDos()
+        complete: () => {
+          this.getToDos()
+          this.openSnackBar("To-Do deleted. Now, you can easily add another!")
+        }
       })
       todo.deleted = true;
     }
@@ -90,16 +94,19 @@ export class HomeComponent {
         'id': category.id
       } as IDeleteCategoryCommand).subscribe({
         error: (e) => {
-          this.auth.canActivate()
-          this.openSnackBar(e)
-          console.error(e)
+          this.auth.canActivate();
+          this.openSnackBar("ERROR! Try again!");
+          console.error(e);
         },
-        complete: () => this.getCategories()
+        complete: () =>{
+          this.getCategories();
+          this.getToDos();
+          this.openSnackBar("Category deleted. Now, you can easily add another!");
+        } 
       });
       category.deleted = true;
     }
     edit(todo: any){
-      console.warn(todo)
       if(todo.canEdit === undefined || todo.canEdit === false){
         todo.canEdit = true;
       } else {
@@ -112,9 +119,13 @@ export class HomeComponent {
         } as IUpdateToDoCommand).subscribe({
           error: (e) => {
             this.auth.canActivate()
+            this.openSnackBar("ERROR! Try again!")
             console.error(e)
           },
-          complete: () => this.getToDos()
+          complete: () =>{
+            this.openSnackBar("Changes applied!")
+            
+          } 
         });
       }
     }
@@ -139,6 +150,7 @@ export class HomeComponent {
     getToDos(){
       this.todoService.getTodo().subscribe({
         next: (v: IGetToDosQuery) => {
+          this.todoLoaded = false
           this.dataSource = v.todos
           this.todoLoaded = true;
         },
@@ -149,6 +161,8 @@ export class HomeComponent {
         })
     }
     openSnackBar(message: string){
-      this.snackBar.open(message, "OK!");
+      this.snackBar.open(message, "OK!", {
+        duration: 5000
+      });
     }
 }

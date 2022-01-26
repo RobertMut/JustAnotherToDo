@@ -9,6 +9,6 @@ export interface IProfileItems {
     getPaged(): Observable<IProfilesPaged>;
     getProfile(): Observable<IProfile>;
     create(command: ICreateProfileCommand): Observable<string>;
-    update(command: IUpdateProfileCommand): void;
-    delete(command: IDeleteProfileCommand): void;
+    update(command: IUpdateProfileCommand): Observable<string>;
+    delete(command: IDeleteProfileCommand): Observable<string>;
 }

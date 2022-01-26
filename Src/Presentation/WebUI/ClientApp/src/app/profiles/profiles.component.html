@@ -9,7 +9,7 @@
     <ng-container matColumnDef="name" >
       <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let element">
-          {{element.username}}
+          <span *ngIf="!element.canEdit">{{element.username}}</span>
           <mat-form-field *ngIf="element.canEdit"> 
             <mat-label>Username</mat-label>
             <input matInput [(ngModel)]="element.username" type="text"/>
@@ -23,7 +23,8 @@
     </ng-container>
     <ng-container matColumnDef="accesslevel" >
         <th mat-header-cell *matHeaderCellDef>Permissions</th>
-          <td mat-cell *matCellDef="let element">{{levels[element.accessLevel]}}
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="!element.canEdit">{{levels[element.accessLevel]}}</span>
             <mat-form-field *ngIf="element.canEdit">
               <mat-label>Permissions</mat-label>
               <mat-select name="accesslevel" class="buttons" [(ngModel)]="element.accessLevel">
@@ -41,7 +42,7 @@
   </table>
   <mat-toolbar *ngIf="loaded">
     <mat-toolbar-row>
-      <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20, 50]" [pageSize]="pageSize" [pageIndex]="dataSource.pageIndex" (page)="getData($event)" [length]="dataSource.totalCount"></mat-paginator>
+      <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20, 50]" [pageSize]="pageSize" [pageIndex]="pageNumber" (page)="getData($event)" [length]="dataSource.totalCount"></mat-paginator>
     </mat-toolbar-row>
 
   </mat-toolbar>

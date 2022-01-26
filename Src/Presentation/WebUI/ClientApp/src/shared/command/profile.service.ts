@@ -15,8 +15,7 @@ import { AuthGuardService } from '../auth/auth.guard.service';
 })
 export class ProfileService implements IProfileItems {
   base_url = angular.Authority+'/api/Profile'
-  constructor(private http: HttpClient,
-    private auth: AuthGuardService) { }
+  constructor(private http: HttpClient) { }
   getPaged(pageNumber: number = 1, pageSize: number = 10): Observable<IProfilesPaged> {
     return this.http.get<IProfilesPaged>(this.base_url+'?pageNumber=' +pageNumber + '&pageSize=' + pageSize);
   }
@@ -28,20 +27,10 @@ export class ProfileService implements IProfileItems {
       responseType: "text"
     });
   }
-  update(command: IUpdateProfileCommand): void {
-    this.http.put(this.base_url, command).subscribe({
-      error: (e) => {
-        this.auth.canActivate()
-        console.error(e)
-      }
-    })
+  update(command: IUpdateProfileCommand): Observable<string> {
+    return this.http.put(this.base_url, command, {responseType: 'text'})
   }
-  delete(command: IDeleteProfileCommand): void {
-    this.http.delete(this.base_url + '/' + command.userId).subscribe({
-      error: (e) => {
-        this.auth.canActivate()
-        console.error(e)
-      }
-    });
+  delete(command: IDeleteProfileCommand): Observable<string> {
+    return this.http.delete(this.base_url + '/' + command.userId, {responseType: 'text'});
   }
 }

@@ -25,6 +25,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatListModule } from '@angular/material/list';
 //auth
 import {
   OAuthModule,
@@ -54,7 +56,9 @@ const MODULES = [
   ColorPickerModule,
   MatToolbarModule,
   MatPaginatorModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTabsModule,
+  MatListModule
 ]
 
 @NgModule({

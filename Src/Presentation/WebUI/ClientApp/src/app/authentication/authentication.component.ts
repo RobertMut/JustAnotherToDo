@@ -30,12 +30,19 @@ export class AuthenticationComponent implements OnInit {
     this.oauthService.setupAutomaticSilentRefresh();
   }
   onRegister(registerFormValue: any): void {
-    this.profileService.create({
-      'username': registerFormValue.login,
-      'password': registerFormValue.password
-    } as ICreateProfileCommand).subscribe({
-      error: (e) => this.error = e.error,
-      complete: () => this.snackBar.open("Successfully registered! Now log in!", "Ok!")
-    })
-  }
+    if(registerFormValue.login === "" && registerFormValue.password === ""){
+      this.snackBar.open("Please fill form fields!", "OK", {
+        duration: 5000
+      })
+    } else {
+      this.profileService.create({
+        'username': registerFormValue.login,
+        'password': registerFormValue.password
+      } as ICreateProfileCommand).subscribe({
+        error: (e) => this.error = e.error,
+        complete: () => this.snackBar.open("Successfully registered! Now log in!", "Ok!")
+      })
+    }
+    }
+
 }
