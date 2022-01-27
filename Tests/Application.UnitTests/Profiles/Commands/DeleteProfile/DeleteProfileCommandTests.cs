@@ -12,11 +12,11 @@ using NUnit.Framework;
 namespace JustAnotherToDo.Application.UnitTests.Profiles.Commands.DeleteProfile;
 public class DeleteProfileCommandTests : ProfileCommandTestBase
 {
-    private DeleteProfileCommandHandler Handler;
+    private DeleteProfileCommand.DeleteProfileCommandHandler Handler;
     [SetUp]
     public void SetUp()
     {
-        Handler = new DeleteProfileCommandHandler(Service);
+        Handler = new DeleteProfileCommand.DeleteProfileCommandHandler(Service);
     }
     [Test]
     public async Task HandleThrowsNotFound()

@@ -11,16 +11,13 @@ namespace JustAnotherToDo.Application.UnitTests.Todos.Queries;
 public class GetUserTodosListQueryHandlerTests : QueriesTestFixture
 {
 
-    private readonly Guid ProfileId = JustAnotherToDoContextFactory.ProfileId;
-
-
     [Test]
     public async Task GetUserTodos()
     {
-        var handler = new GetUserTodosListQueryHandler(Context,new SqlUserManagerService(ApplicationContext), Mapper);
+        var handler = new GetUserTodosListQueryHandler(Context);
         var result = await handler.Handle(new GetUserTodosListQuery()
         {
-            Username = "TestUser"
+            UserId = JustAnotherToDoContextFactory.ProfileId
         }, CancellationToken.None);
         Assert.IsInstanceOf(typeof(UserTodosListVm), result);
         Assert.IsTrue(result.Todos.Count == 3);

@@ -1,7 +1,9 @@
-﻿namespace JustAnotherToDo.Application.Common.Interfaces;
+﻿using JustAnotherToDo.Application.Profiles.Queries.GetProfileDetail;
+
+namespace JustAnotherToDo.Application.Common.Interfaces;
 
 public interface ICurrentUserService
 {
-    string UserName { get; }
+    ProfileDetailVm User { get; }
     public bool IsAuthenticated { get; }
 }

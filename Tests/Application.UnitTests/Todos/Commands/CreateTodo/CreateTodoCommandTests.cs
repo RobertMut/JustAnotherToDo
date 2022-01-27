@@ -19,7 +19,7 @@ public class CreateTodoCommandTests : CommandTestBase
                 m => m.Send(It.IsAny<CreateTodoCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new Guid())
             .Verifiable("Todo not created");
-        var handler = new CreateTodoCommandHandler(Context);
+        var handler = new CreateTodoCommand.CreateTodoCommandHandler(Context);
         var todo = new CreateTodoCommand
         {
             Name = "Todo",

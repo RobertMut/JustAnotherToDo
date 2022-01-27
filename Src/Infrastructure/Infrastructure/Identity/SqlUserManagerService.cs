@@ -8,16 +8,16 @@ namespace JustAnotherToDo.Infrastructure.Identity
 {
     public class SqlUserManagerService : IUserManager
     {
-        private readonly IApplicationDbContext _context;
+        private readonly IJustAnotherToDoDbContext _context;
 
-        public SqlUserManagerService(IApplicationDbContext context)
+        public SqlUserManagerService(IJustAnotherToDoDbContext context)
         {
             _context = context;
         }
 
         public async Task<Guid> CreateUserAsync(string userName, string password,AccessLevel permissions, CancellationToken ct)
         {
-            var searchUser = await _context.Profiles.FirstOrDefaultAsync(u => u.Username == userName, ct);
+            var searchUser = await _context.Profiles.SingleOrDefaultAsync(u => u.Username == userName, ct);
             if (searchUser != null) throw new UserExistsException(nameof(UserProfile), userName);
             var user = new UserProfile()
             {
@@ -30,15 +30,15 @@ namespace JustAnotherToDo.Infrastructure.Identity
             return entity.Entity.UserId;
         }
 
-        public async Task<UserProfile> GetUserAsync(string userName)
+        public async Task<UserProfile> GetUserAsync(string userName, CancellationToken ct)
         {
-            var result = await _context.Profiles.FirstOrDefaultAsync(c => c.Username == userName);
+            var result = await _context.Profiles.FirstOrDefaultAsync(u => u.Username == userName, ct);
             return result;
         }
 
-        public async Task<UserProfile> GetUserByIdAsync(Guid id)
+        public async Task<UserProfile> GetUserByIdAsync(Guid id, CancellationToken ct)
         {
-            var result = await _context.Profiles.FirstOrDefaultAsync(c => c.UserId == id);
+            var result = await _context.Profiles.FirstOrDefaultAsync(c => c.UserId == id, ct);
             return result;
         }
 

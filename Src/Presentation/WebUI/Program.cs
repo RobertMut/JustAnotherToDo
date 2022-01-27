@@ -2,7 +2,6 @@ using FluentValidation.AspNetCore;
 using JustAnotherToDo.Application;
 using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Infrastructure;
-using JustAnotherToDo.Infrastructure.Identity;
 using JustAnotherToDo.Infrastructure.Swagger;
 using JustAnotherToDo.Persistence;
 using WebUI.Filters;
@@ -21,7 +20,6 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddHealthChecks().AddDbContextCheck<JustAnotherToDoDbContext>();
-builder.Services.AddHealthChecks().AddDbContextCheck<ApplicationDBContext>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMvc(opt =>
     {
@@ -40,7 +38,7 @@ builder.Services.AddSpaStaticFiles(conf =>
 builder.Services.AddSwagger(builder.Configuration);
 
 var app = builder.Build();
-await app.Services.DatabaseInitializer<JustAnotherToDoDbContext, ApplicationDBContext>();
+await app.Services.DatabaseInitializer<JustAnotherToDoDbContext>();
 
 
 if (!app.Environment.IsDevelopment())

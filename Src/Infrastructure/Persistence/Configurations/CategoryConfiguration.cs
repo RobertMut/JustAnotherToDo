@@ -11,5 +11,6 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.HasKey(k => k.Id);
         builder.Property(k => k.Id).ValueGeneratedOnAdd();
         builder.Property(e => e.Name).IsRequired();
+        builder.HasOne(c => c.Profile).WithMany().HasForeignKey(c => c.ProfileId);
     }
 }

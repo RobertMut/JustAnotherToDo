@@ -32,19 +32,15 @@ public class ToDoController : ControllerBase
     {
         var todos = await _mediator.Send(new GetUserTodosListQuery
         {
-            Username = _currentUser.UserName
-        });
+            UserId = _currentUser.User.Id
+    });
         return todos;
     }
 
     [HttpPost]
     public async Task<IActionResult> PostTodo([FromBody]CreateTodoCommand command)
     {
-        var user = await _mediator.Send(new GetProfileDetailQuery
-        {
-            Username = _currentUser.UserName
-        });
-        command.ProfileId = user.Id;
+        command.ProfileId = _currentUser.User.Id;
         var guid = await _mediator.Send(command);
         return Ok(guid);
     }

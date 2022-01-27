@@ -6,6 +6,7 @@ using JustAnotherToDo.Domain.Entities;
 using JustAnotherToDo.Domain.Enums;
 using JustAnotherToDo.Infrastructure.Identity;
 using JustAnotherToDo.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace JustAnotherToDo.WebUI.IntegrationTests.Common;
@@ -65,13 +66,6 @@ public static class Utilities
             Color = "#FF00FF",
             ProfileId = TestUserId
         });
-        context.SaveChanges();
-    }
-
-
-
-    public static void InitializeApplicationDbForTests(ApplicationDBContext context)
-    {
         context.Profiles.AddRange(new UserProfile
         {
             UserId = TestUserId,
@@ -89,4 +83,6 @@ public static class Utilities
         context.SaveChanges();
 
     }
+
+
 }

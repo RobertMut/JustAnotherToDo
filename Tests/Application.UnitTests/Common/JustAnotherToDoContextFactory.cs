@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using JustAnotherToDo.Domain.Entities;
+using JustAnotherToDo.Domain.Enums;
 using JustAnotherToDo.Persistence;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -32,7 +33,7 @@ public class JustAnotherToDoContextFactory
             }
         });
         context.SaveChanges();
-        context.ToDos.AddRange(new []
+        context.ToDos.AddRange(new[]
         {
             new ToDo
             {
@@ -58,6 +59,24 @@ public class JustAnotherToDoContextFactory
                 CategoryId = null,
                 ProfileId = ProfileId
             }
+        });
+        context.SaveChanges();
+        context.Profiles.AddRange(new UserProfile
+        {
+            Username = "Test",
+            Password = "Test",
+            AccessLevel = AccessLevel.Administrator
+        }, new UserProfile
+        {
+            Username = "Test2",
+            Password = "Test2",
+            AccessLevel = AccessLevel.User
+        }, new UserProfile()
+        {
+            UserId = ProfileId,
+            Username = "TestUser",
+            Password = "TestUser",
+            AccessLevel = AccessLevel.User
         });
         context.SaveChanges();
         return context;

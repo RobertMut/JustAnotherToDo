@@ -6,11 +6,11 @@ public class ContextualRequest<TRequest, TResponse> : IRequest<TResponse>
     where TRequest : IRequest<TResponse>
 {
     public TRequest Data { get; }
-    public string Username { get; }
+    public Guid UserId { get; }
 
-    public ContextualRequest(TRequest data, string username)
+    public ContextualRequest(TRequest data, Guid userId)
     {
         Data = data;
-        Username = username;
+        UserId = userId;
     }
 }

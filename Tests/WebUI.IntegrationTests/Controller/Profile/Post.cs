@@ -49,7 +49,7 @@ public class Post
         var client = _factory.CreateClient();
         var profile =  Utilities.GetRequestContent(new CreateProfileCommand
         {
-            Username = "Newuser1",
+            Username = "AnotherUser",
             Password = "12345"
         });
         var response = await client.PostAsync("api/Profile", profile);

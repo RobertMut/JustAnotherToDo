@@ -15,9 +15,9 @@ public class GetProfilesWithPaginationQueryHandlerTests : QueriesTestFixture
     [Test]
     public async Task GetPagedProfiles()
     {
-        var handler = new GetProfilesWithPaginationQueryHandler(ApplicationContext, Mapper);
+        var handler = new GetProfilesWithPaginationQueryHandler(Context, Mapper);
         var result = await handler.Handle(new ContextualRequest<GetProfilesWithPaginationQuery, PaginatedList<ProfilesDto>>(
-            new GetProfilesWithPaginationQuery(), "TestUser"), CancellationToken.None);
+            new GetProfilesWithPaginationQuery(), JustAnotherToDoContextFactory.ProfileId), CancellationToken.None);
         Assert.IsInstanceOf(typeof(PaginatedList<ProfilesDto>), result);
         Assert.IsTrue(result.TotalCount == 3);
     }

@@ -27,19 +27,15 @@ public class CustomWebApplicationFactory<TStartup>
         builder.UseTestServer();
         builder.ConfigureServices(services =>
         {
-            services.AddEntityFrameworkInMemoryDatabase();
-            services.Remove(GetDescriptor<ApplicationDBContext>(services));
+            //services.AddEntityFrameworkInMemoryDatabase();
             services.Remove(GetDescriptor<JustAnotherToDoDbContext>(services));
-            services.AddDbContext<ApplicationDBContext>(options =>
-            {
-                options.UseInMemoryDatabase("InMemoryDbForTesting");
-            });
             services.AddDbContext<JustAnotherToDoDbContext>(options =>
             {
+                //options.UseSqlite("Data Source=:memory:");
                 options.UseInMemoryDatabase("InMemoryDbForTesting");
-            });
+
+            }, ServiceLifetime.Transient);
             services.AddScoped<IJustAnotherToDoDbContext, JustAnotherToDoDbContext>();
-            services.AddScoped<IApplicationDbContext, ApplicationDBContext>();
             services.AddTransient<IAuthenticationSchemeProvider, MockSchemeProvider>();
 
             var sp = services.BuildServiceProvider();
@@ -47,7 +43,6 @@ public class CustomWebApplicationFactory<TStartup>
             using (var scope = sp.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
-                var appDb = scopedServices.GetRequiredService<ApplicationDBContext>();
                 var db = scopedServices.GetRequiredService<JustAnotherToDoDbContext>();
                 var logger = scopedServices
                     .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
@@ -55,7 +50,6 @@ public class CustomWebApplicationFactory<TStartup>
                 try
                 {
                     Utilities.InitializeDbForTests(db);
-                    Utilities.InitializeApplicationDbForTests(appDb);
                 }
                 catch (Exception ex)
                 {

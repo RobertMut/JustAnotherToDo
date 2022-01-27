@@ -9,6 +9,6 @@
         public Guid? CategoryId { get; set; }
         public Guid ProfileId { get; set; }
         public Category Category { get; set; }
-        //public UserProfile Profile { get; set; }
+        public UserProfile Profile { get; set; }
     }
 }

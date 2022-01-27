@@ -12,9 +12,9 @@ namespace JustAnotherToDo.Application.UnitTests.Todos.Commands.DeleteTodo;
 public class DeleteTodoCommandTests : CommandTestBase
 {
     [Test]
-    public async Task Handle_ThrowsNotFound()
+    public async Task HandleThrowsNotFound()
     {
-        var handle = new DeleteTodoCommandHandler(Context);
+        var handle = new DeleteTodoCommand.DeleteTodoCommandHandler(Context);
         var command = new DeleteTodoCommand()
         {
             Id = Guid.NewGuid()
@@ -22,9 +22,9 @@ public class DeleteTodoCommandTests : CommandTestBase
         Assert.ThrowsAsync<NotFoundException>(() => handle.Handle(command, CancellationToken.None));
     }
     [Test]
-    public async Task Handle_DeleteTodo()
+    public async Task HandleDeleteTodo()
     {
-        var handle = new DeleteTodoCommandHandler(Context);
+        var handle = new DeleteTodoCommand.DeleteTodoCommandHandler(Context);
         var todo = await Context.ToDos.FirstOrDefaultAsync(t => t.Name == "Task1");
         var command = new DeleteTodoCommand
         {

@@ -31,7 +31,7 @@ public class InitialDataSeeder
 
     public async Task SeedCategory(CancellationToken cancellationToken)
     {
-        var user = await _manager.GetUserAsync("Administrator");
+        var user = await _manager.GetUserAsync("Administrator", cancellationToken);
         var category = new Category
         {
             Name = "green",
@@ -44,7 +44,7 @@ public class InitialDataSeeder
 
     public async Task SeedTodo(CancellationToken cancellationToken)
     {
-        var user = await _manager.GetUserAsync("Administrator");
+        var user = await _manager.GetUserAsync("Administrator", cancellationToken);
         var category = _context.Categories.Single(c => c.Name == "green" && c.ProfileId == user.UserId);
         var todo = new ToDo
         {

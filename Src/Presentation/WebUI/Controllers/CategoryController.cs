@@ -31,19 +31,16 @@ public class CategoryController : ControllerBase
     {
         var categories = await _mediator.Send(new GetUserCategoriesListQuery
         {
-            Username = _currentUser.UserName
-        });
+            UserId = _currentUser.User.Id
+    });
         return categories;
     }
 
     [HttpPost]
     public async Task<IActionResult> PostCategory([FromBody] CreateCategoryCommand command)
     {
-        var user = await _mediator.Send(new GetProfileDetailQuery
-        {
-            Username = _currentUser.UserName
-        });
-        command.ProfileId = user.Id;
+        command.ProfileId = _currentUser.User.Id;
+
         var guid = await _mediator.Send(command);
         return Ok(guid);
     }

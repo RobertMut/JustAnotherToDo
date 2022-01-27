@@ -10,12 +10,12 @@ namespace JustAnotherToDo.Application.UnitTests.Profiles.Commands.CreateProfile;
 public class CreateProfileCommandTests : ProfileCommandTestBase
 {
     private Mock<IMediator> Mediator;
-    private CreateProfileCommandHandler Handler;
+    private CreateProfileCommand.CreateProfileCommandHandler Handler;
     [SetUp]
     public void SetUp()
     {
         Mediator = new Mock<IMediator>();
-        Handler = new CreateProfileCommandHandler(Service);
+        Handler = new CreateProfileCommand.CreateProfileCommandHandler(Service);
     }
     [Test]
     public void Handle()

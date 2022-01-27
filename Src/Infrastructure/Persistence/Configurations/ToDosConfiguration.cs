@@ -19,5 +19,6 @@ public class ToDosConfiguration : IEntityTypeConfiguration<ToDo>
             .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK_Categories_Todo_CategoryId");
+        builder.HasOne(e => e.Profile).WithMany().HasForeignKey(s => s.ProfileId);
     }
 }

@@ -18,7 +18,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             {typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException},
             {typeof(UserExistsException), HandleUserExistsException},
             {typeof(ValidationException), HandleValidationException},
-            {typeof(ArgumentException), HandleUserExistsException}
+            {typeof(ArgumentException), HandleException}
         };
     }
 

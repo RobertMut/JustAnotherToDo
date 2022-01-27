@@ -33,9 +33,10 @@ public class ProfileController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<PaginatedList<ProfilesDto>>> GetProfileList([FromQuery] GetProfilesWithPaginationQuery query)
     {
+        var userId = _currentUser.User.Id;
         var request =
             new ContextualRequest<GetProfilesWithPaginationQuery, PaginatedList<ProfilesDto>>(query,
-                _currentUser.UserName);
+                userId);
         var paginatedProfiles = await _mediator.Send(request);
         return paginatedProfiles;
 
@@ -44,26 +45,20 @@ public class ProfileController : ControllerBase
     [HttpGet("profile")]
     public async Task<ActionResult<ProfileDetailVm>> GetProfile()
     {
-        var user = await _mediator.Send(new GetProfileDetailQuery
-        {
-            Username = _currentUser.UserName
-        });
-
-        return user;
+        return _currentUser.User;
 
     }
     [AllowAnonymous]
     [SecurityHeaders]
     [HttpPost]
-    public async Task<IActionResult> PostProfile([FromBody]CreateProfileCommand command)
+    public async Task<IActionResult> PostProfile([FromBody] CreateProfileCommand command)
     {
         var guid = await _mediator.Send(command);
-
         return Ok(guid);
     }
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPut]
-    public async Task<IActionResult> UpdateProfile([FromBody]UpdateProfileCommand command)
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand command)
     {
 
         var guid = await _mediator.Send(command);
@@ -71,10 +66,8 @@ public class ProfileController : ControllerBase
 
     }
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteProfile([FromRoute]Guid id)
+    public async Task<IActionResult> DeleteProfile([FromRoute] Guid id)
     {
-
-
         var guid = await _mediator.Send(new DeleteProfileCommand
         {
             UserId = id

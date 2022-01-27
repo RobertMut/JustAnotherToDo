@@ -10,7 +10,7 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<JustAnotherToDoDbContext>(opt =>
-            opt.UseSqlServer(configuration.GetConnectionString("JustAnotherToDoDatabase")));
+            opt.UseSqlServer(configuration.GetConnectionString("JustAnotherToDoDatabase")), ServiceLifetime.Transient);
         services.AddScoped<IJustAnotherToDoDbContext>(provider => provider.GetService<JustAnotherToDoDbContext>());
         return services;
     }

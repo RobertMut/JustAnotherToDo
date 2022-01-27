@@ -15,7 +15,7 @@ public class DeleteCategoryCommandTests : CommandTestBase
     [Test]
     public async Task HandleThrowsNotFound()
     {
-        var handler = new DeleteCategoryCommandHandler(Context);
+        var handler = new DeleteCategoryCommand.DeleteCategoryCommandHandler(Context);
         var command = new DeleteCategoryCommand
         {
             Id = Guid.NewGuid()
@@ -26,7 +26,7 @@ public class DeleteCategoryCommandTests : CommandTestBase
     [Test]
     public async Task HandleDeleteCategory()
     {
-        var handler = new DeleteCategoryCommandHandler(Context);
+        var handler = new DeleteCategoryCommand.DeleteCategoryCommandHandler(Context);
         var category = await Context.Categories.FirstOrDefaultAsync(c => c.Name == "Not important");
         var command = new DeleteCategoryCommand
         {

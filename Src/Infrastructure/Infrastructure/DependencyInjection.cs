@@ -24,9 +24,6 @@ public static class DependencyInjection
     {
         services.AddScoped<IUserManager, SqlUserManagerService>();
 
-        services.AddDbContext<ApplicationDBContext>(opt =>
-            opt.UseSqlServer(configuration.GetConnectionString("JustAnotherToDoDatabase")));
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDBContext>());
 
         services.AddIdentityServer(opt =>
             {
@@ -130,20 +127,17 @@ public static class DependencyInjection
         return webHost;
     }
 
-    public static async Task DatabaseInitializer<TContext, TIdentityContext>(this IServiceProvider host) where TContext : DbContext
-    where TIdentityContext : DbContext
+    public static async Task DatabaseInitializer<TContext>(this IServiceProvider host) where TContext : DbContext
     {
         using (var scope = host.CreateScope())
         {
             var services = scope.ServiceProvider;
             try
             {
-                var appContext = services.GetRequiredService<ApplicationDBContext>();
+                var appContext = services.GetRequiredService<IJustAnotherToDoDbContext>();
                 var dbContext = services.GetRequiredService<TContext>();
-                var identityContext = services.GetRequiredService<TIdentityContext>();
                 var mediator = services.GetRequiredService<IMediator>();
                 dbContext.Database.Migrate();
-                identityContext.Database.Migrate();
 
                 var user = await appContext.Profiles.FirstOrDefaultAsync(u => u.Username == "Administrator");
                 if (user == null) await mediator.Send(new SeedInitialDataCommand(), CancellationToken.None);

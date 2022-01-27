@@ -11,16 +11,13 @@ namespace JustAnotherToDo.Application.UnitTests.Common;
 public class QueriesTestFixture : IDisposable
 {
     public JustAnotherToDoDbContext Context { get; private set; }
-    public ApplicationDBContext ApplicationContext { get; private set; }
     public IMapper Mapper { get; private set; }
     public IUserManager Service { get; private set; }
     [SetUp]
     public virtual void SetUp()
     {
-        
-        ApplicationContext = ApplicationContextFactory.Create();
-        Service = new SqlUserManagerService(ApplicationContext);
         Context = JustAnotherToDoContextFactory.Create();
+        Service = new SqlUserManagerService(Context);
         var configurationProvider = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<MappingProfile>();
