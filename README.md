@@ -29,7 +29,7 @@ npm start
 ```
 dotnet run
 ```
-Launch https://localhost:44447 to view Web UI
+Launch https://localhost:44447 to view Web UI\
 Launch https://localhost:7143/swagger to access Swagger
 
 ## Documentation
