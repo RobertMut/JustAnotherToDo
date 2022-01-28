@@ -37,7 +37,13 @@ export class ProfileComponent implements OnInit {
         'userId': this.profile.id,
         'password': profileForm.pass,
         'username': this.profile.username
-      } as IUpdateProfileCommand)
+      } as IUpdateProfileCommand).subscribe({
+        error: (e) => {
+          this.auth.canActivate()
+          console.error(e)
+        },
+        complete: () => this.snack.open("Password updated!", "Ok!", {duration: 5000})
+      })
     }
     else {
       window.alert('Invalid current password!')
