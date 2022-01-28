@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JustAnotherToDo.Persistence.Migrations
 {
     [DbContext(typeof(JustAnotherToDoDbContext))]
-    [Migration("20211229205546_Initial")]
+    [Migration("20220128115115_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,14 @@ namespace JustAnotherToDo.Persistence.Migrations
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("UserProfileUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProfileId");
+
+                    b.HasIndex("UserProfileUserId");
 
                     b.ToTable("Categories");
                 });
@@ -68,11 +75,55 @@ namespace JustAnotherToDo.Persistence.Migrations
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("UserProfileUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("ProfileId");
+
+                    b.HasIndex("UserProfileUserId");
+
                     b.ToTable("ToDos");
+                });
+
+            modelBuilder.Entity("JustAnotherToDo.Domain.Entities.UserProfile", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AccessLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Profiles");
+                });
+
+            modelBuilder.Entity("JustAnotherToDo.Domain.Entities.Category", b =>
+                {
+                    b.HasOne("JustAnotherToDo.Domain.Entities.UserProfile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JustAnotherToDo.Domain.Entities.UserProfile", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("UserProfileUserId");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("JustAnotherToDo.Domain.Entities.ToDo", b =>
@@ -82,11 +133,30 @@ namespace JustAnotherToDo.Persistence.Migrations
                         .HasForeignKey("CategoryId")
                         .HasConstraintName("FK_Categories_Todo_CategoryId");
 
+                    b.HasOne("JustAnotherToDo.Domain.Entities.UserProfile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JustAnotherToDo.Domain.Entities.UserProfile", null)
+                        .WithMany("ToDos")
+                        .HasForeignKey("UserProfileUserId");
+
                     b.Navigation("Category");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("JustAnotherToDo.Domain.Entities.Category", b =>
                 {
+                    b.Navigation("ToDos");
+                });
+
+            modelBuilder.Entity("JustAnotherToDo.Domain.Entities.UserProfile", b =>
+                {
+                    b.Navigation("Categories");
+
                     b.Navigation("ToDos");
                 });
 #pragma warning restore 612, 618
