@@ -29,6 +29,7 @@ npm start
 ```
 dotnet run
 ```
+Default user: Administrator / 1234
 Launch https://localhost:44447 to view Web UI\
 Launch https://localhost:7143/swagger to access Swagger
 
