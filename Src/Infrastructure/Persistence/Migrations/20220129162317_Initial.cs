@@ -30,8 +30,7 @@ namespace JustAnotherToDo.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserProfileUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,11 +41,6 @@ namespace JustAnotherToDo.Persistence.Migrations
                         principalTable: "Profiles",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Categories_Profiles_UserProfileUserId",
-                        column: x => x.UserProfileUserId,
-                        principalTable: "Profiles",
-                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -58,8 +52,7 @@ namespace JustAnotherToDo.Persistence.Migrations
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserProfileUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,22 +68,12 @@ namespace JustAnotherToDo.Persistence.Migrations
                         principalTable: "Profiles",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ToDos_Profiles_UserProfileUserId",
-                        column: x => x.UserProfileUserId,
-                        principalTable: "Profiles",
-                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_ProfileId",
                 table: "Categories",
                 column: "ProfileId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_UserProfileUserId",
-                table: "Categories",
-                column: "UserProfileUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ToDos_CategoryId",
@@ -101,11 +84,6 @@ namespace JustAnotherToDo.Persistence.Migrations
                 name: "IX_ToDos_ProfileId",
                 table: "ToDos",
                 column: "ProfileId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ToDos_UserProfileUserId",
-                table: "ToDos",
-                column: "UserProfileUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

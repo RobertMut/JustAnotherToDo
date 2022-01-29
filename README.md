@@ -33,12 +33,13 @@ Default user: Administrator / 1234\
 Launch https://localhost:44447 to view Web UI\
 Launch https://localhost:7143/swagger to access Swagger
 
+
 ## Documentation
 The documentation of this solution can be found [here](./docs/documentation.md).
 
 ## Screenshots
 ![Login](https://i.imgur.com/Wwl9rKF.png)
-![Home](https://i.imgur.com/jV96h9y.png)
-![Menu](https://i.imgur.com/C5bZo5J.png)
+![Home](https://i.imgur.com/62gRFoe.png)
+![Menu](https://i.imgur.com/ebhkqFV.png)
 ![Profile](https://i.imgur.com/Vi77PYT.png)
 ![List](https://i.imgur.com/dsXqIkd.png)

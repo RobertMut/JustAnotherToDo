@@ -39,14 +39,9 @@ namespace JustAnotherToDo.Persistence.Migrations
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserProfileUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProfileId");
-
-                    b.HasIndex("UserProfileUserId");
 
                     b.ToTable("Categories");
                 });
@@ -73,16 +68,11 @@ namespace JustAnotherToDo.Persistence.Migrations
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserProfileUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ProfileId");
-
-                    b.HasIndex("UserProfileUserId");
 
                     b.ToTable("ToDos");
                 });
@@ -112,14 +102,10 @@ namespace JustAnotherToDo.Persistence.Migrations
             modelBuilder.Entity("JustAnotherToDo.Domain.Entities.Category", b =>
                 {
                     b.HasOne("JustAnotherToDo.Domain.Entities.UserProfile", "Profile")
-                        .WithMany()
+                        .WithMany("Categories")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("JustAnotherToDo.Domain.Entities.UserProfile", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("UserProfileUserId");
 
                     b.Navigation("Profile");
                 });
@@ -132,14 +118,10 @@ namespace JustAnotherToDo.Persistence.Migrations
                         .HasConstraintName("FK_Categories_Todo_CategoryId");
 
                     b.HasOne("JustAnotherToDo.Domain.Entities.UserProfile", "Profile")
-                        .WithMany()
+                        .WithMany("ToDos")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("JustAnotherToDo.Domain.Entities.UserProfile", null)
-                        .WithMany("ToDos")
-                        .HasForeignKey("UserProfileUserId");
 
                     b.Navigation("Category");
 
