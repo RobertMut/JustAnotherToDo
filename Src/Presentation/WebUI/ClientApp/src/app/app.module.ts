@@ -39,6 +39,7 @@ import angular from '../assets/angular.json';
 import { OauthRedirectComponent } from './oauth-redirect/oauth-redirect.component';
 import { ProfilesComponent } from './profiles/profiles.component';
 import { ProfileComponent } from './profile/profile.component'
+import { AuthGuardService } from '../shared/auth/auth.guard.service';
 
 const MODULES = [
   MatButtonModule,
@@ -60,7 +61,9 @@ const MODULES = [
   MatTabsModule,
   MatListModule
 ]
-
+export function storageFactory(): OAuthStorage {
+  return sessionStorage;
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,9 +82,9 @@ const MODULES = [
     RouterModule.forRoot([
       { path: '', component: AuthenticationComponent, pathMatch: 'full'},
       { path: 'oauth-redirect', component: OauthRedirectComponent},
-      { path: 'home', component: HomeComponent },
-      { path: 'profiles', component: ProfilesComponent },
-      { path: 'profile', component: ProfileComponent }
+      { path: 'home', component: HomeComponent, canActivate:[AuthGuardService] },
+      { path: 'profiles', component: ProfilesComponent, canActivate:[AuthGuardService] },
+      { path: 'profile', component: ProfileComponent, canActivate:[AuthGuardService] }
     ]),
     OAuthModule.forRoot({
       resourceServer: {
@@ -98,7 +101,7 @@ const MODULES = [
   ],
   providers: [
         {provide: AuthConfig, useValue: authConfig },
-        {provide: OAuthStorage, useValue: sessionStorage }
+        {provide: OAuthStorage, useValue: storageFactory() }
   ],
   bootstrap: [AppComponent]
 })

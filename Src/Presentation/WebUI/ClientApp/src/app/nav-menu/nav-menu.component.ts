@@ -32,7 +32,12 @@ export class NavMenuComponent implements OnInit {
     this.isExpanded = !this.isExpanded;
   }
   logout(){
-    this.oauthService.revokeTokenAndLogout();
+    this.oauthService.revokeTokenAndLogout({
+      'client_id': this.oauthService.clientId,
+      //'id_token_hint': this.oauthService.getIdToken(),
+      'post_logout_redirect_uri': this.oauthService.postLogoutRedirectUri,
+    })
     this.isValid = false;
+    this.router.navigate(['/'])
   }
 }

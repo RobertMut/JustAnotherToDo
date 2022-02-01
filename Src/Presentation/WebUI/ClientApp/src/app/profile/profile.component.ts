@@ -39,8 +39,7 @@ export class ProfileComponent implements OnInit {
         'username': this.profile.username
       } as IUpdateProfileCommand).subscribe({
         error: (e) => {
-          this.auth.canActivate()
-          console.error(e)
+          this.auth.check(e);
         },
         complete: () => this.snack.open("Password updated!", "Ok!", {duration: 5000})
       })

@@ -60,7 +60,7 @@ namespace WebUI.Controllers
         {
             // build a model so we know what to show on the login page
             var vm = await BuildLoginModelAsync(returnUrl);
-
+            
 
             return View(vm);
         }
@@ -96,7 +96,6 @@ namespace WebUI.Controllers
                     };
 
                     await HttpContext.SignInAsync(identityUser, authenticationProperties);
-
                     if (_interaction.IsValidReturnUrl(model.ReturnUrl))
                     {
                         return Redirect(model.ReturnUrl);
@@ -128,7 +127,6 @@ namespace WebUI.Controllers
         {
             // build a model so the logout page knows what to display
             var vm = await BuildLogoutModelAsync(logoutId);
-
             if (vm.ShowLogoutPrompt == false)
             {
                 // if the request for logout was properly authenticated from IdentityServer, then
@@ -169,7 +167,6 @@ namespace WebUI.Controllers
                 // this triggers a redirect to the external provider for sign-out
                 return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
             }
-
             return View("LoggedOut", vm);
         }
 
@@ -196,15 +193,13 @@ namespace WebUI.Controllers
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
                     //ReturnUrl = context?.RedirectUri,
-                    Username = context?.LoginHint,
+                    Username = context?.LoginHint
                 };
 
 
 
                 return vm;
             }
-
-            var schemes = await _schemeProvider.GetAllSchemesAsync();
 
 
             var allowLocal = true;
@@ -214,7 +209,6 @@ namespace WebUI.Controllers
                 if (client != null)
                 {
                     allowLocal = client.EnableLocalLogin;
-
 
                 }
             }
@@ -264,11 +258,13 @@ namespace WebUI.Controllers
         {
             // get context information (client name, post logout redirect URI and iframe for federated signout)
             var logout = await _interaction.GetLogoutContextAsync(logoutId);
-
+            var clientName = logout?.ClientIds.FirstOrDefault();
+            var client = await this._clientStore.FindClientByIdAsync(clientName);
+            var url = client.PostLogoutRedirectUris.FirstOrDefault();
             var vm = new LoggedOutModel
             {
                 AutomaticRedirectAfterSignOut = AccountOptions.AutomaticRedirectAfterSignOut,
-                PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
+                PostLogoutRedirectUri = string.IsNullOrEmpty(logout?.PostLogoutRedirectUri) ? url : logout?.PostLogoutRedirectUri,
                 ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
                 SignOutIframeUrl = logout?.SignOutIFrameUrl,
                 LogoutId = logoutId

@@ -10,7 +10,8 @@ export const authConfig: AuthConfig = {
     dummyClientSecret: angular.ClientSecret,
     responseType: "id_token token",
     requestAccessToken: true,
-    logoutUrl: angular.Authority + '/Account/Logout', 
+    logoutUrl: angular.Authority + '/Account/Logout',
+    postLogoutRedirectUri: window.location.origin,
     scope: angular.Scope,
-    showDebugInformation: true
+    showDebugInformation: true,
 }

@@ -13,8 +13,9 @@ public class CurrentUserService : ICurrentUserService
     {
         _mediator = mediator;
         var username = httpContextAccessor.HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if(!string.IsNullOrEmpty(username)) InitializeAsync(username).Wait();
         IsAuthenticated = httpContextAccessor.HttpContext.User.IsAuthenticated();
+        if (!string.IsNullOrEmpty(username) ) InitializeAsync(username).Wait();
+
     }
 
     private async Task InitializeAsync(string username)

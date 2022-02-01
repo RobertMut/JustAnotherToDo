@@ -1,7 +1,7 @@
 <table mat-table [dataSource]="dataSource" *ngIf="todoLoaded">
   <ng-container matColumnDef="name" >
     <th mat-header-cell *matHeaderCellDef>
-      <mat-expansion-panel *ngIf="categoryLoaded" class="no-padding">
+      <mat-expansion-panel *ngIf="categoryLoaded" class="no-padding" [(expanded)]="expanded">
         <mat-expansion-panel-header>
           <mat-panel-title>
             ToDos
@@ -11,9 +11,9 @@
           </mat-panel-description>
 
         </mat-expansion-panel-header>
-        <mat-tab-group *ngIf="categoryLoaded">
+        <mat-tab-group *ngIf="categoryLoaded" mat-align-tabs="center">
           <mat-tab label="Create ToDo">
-              <form (ngSubmit)="onAdd(addForm.value)" #addForm="ngForm">
+              <form (ngSubmit)="onAdd(addForm.value); addForm.resetForm()" #addForm="ngForm" id="column" class="center">
                 <mat-form-field>
                   <mat-label>To-do name</mat-label>
                   <input matInput type="text" name="name" ngModel/>
@@ -37,15 +37,17 @@
               </form>
           </mat-tab>
           <mat-tab label="Create Category">
-              <form (ngSubmit)="onCategory(categoryForm.value)" #categoryForm="ngForm">
+              <form (ngSubmit)="onCategory(categoryForm.value); categoryForm.resetForm()" #categoryForm="ngForm" id="column" class="center">
                 <mat-form-field>
                   <mat-label>Name</mat-label>
                   <input matInput type="text" name="name" ngModel/>
                 </mat-form-field>
-                <mat-form-field>
+                <input [(colorPicker)]="color" [style.background]="color" [cpOutputFormat]="'hex'" [cpDisableInput]="true"
+                [cpToggle]="true" [cpDialogDisplay]="'inline'" [value]="color" name="color" class="hidden" ngModel/>
+                <!--<mat-form-field>
                   <mat-label>Color</mat-label>
-                  <input matInput [(colorPicker)]="color" [style.background]="color" [cpOutputFormat]="'hex'" [cpDialogDisplay]="'inline'" [cpCloseClickOutside]="true" [value]="color" name="color" ngModel/>
-                </mat-form-field>
+                  
+                </mat-form-field>-->
                 <button id="category-submit" mat-raised-button type="submit" [disabled]="!(categoryForm.value.name)">Add</button>
               </form>
           </mat-tab>
@@ -85,7 +87,7 @@
                 </mat-select>
               </mat-form-field>
           </div>
-          <div class="card-text">
+          <div class="card-text center">
             {{element.endDate !== "0001-01-01T00:00:00" ? element.endDate : ""}}
             <button mat-button (click)="delete(element)"><mat-icon>delete</mat-icon></button>
             <button mat-button (click)="edit(element)" *ngIf="!element.canEdit"><mat-icon>create</mat-icon></button>

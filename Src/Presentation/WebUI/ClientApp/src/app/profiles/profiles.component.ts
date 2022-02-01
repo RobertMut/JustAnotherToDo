@@ -31,8 +31,7 @@ export class ProfilesComponent implements OnInit {
         this.loaded = true;
       },
       error: (e) => {
-        console.error(e)
-        this.authService.canActivate();
+        this.authService.check(e);
       }
     })
    }
@@ -47,8 +46,7 @@ export class ProfilesComponent implements OnInit {
         this.dataSource = n;
       },
       error: (e) => {
-        console.error(e)
-        this.authService.canActivate()
+        this.authService.check(e);
       }
     })
   }
@@ -65,9 +63,7 @@ export class ProfilesComponent implements OnInit {
         'accessLevel': element.accessLevel
       } as IUpdateProfileCommand).subscribe({
         error: (e) => {
-          this.authService.canActivate()
-          this.openSnackBar("ERROR! Try again!");
-          console.error(e)
+          this.authService.check(e);
         },
         complete: () => {
           this.getData({
@@ -84,9 +80,7 @@ export class ProfilesComponent implements OnInit {
       'userId': element.userId
     } as IDeleteProfileCommand).subscribe({
       error: (e) => {
-        this.authService.canActivate();
-        this.openSnackBar("ERROR! Try again!");
-        console.error(e)
+        this.authService.check(e);
       },
       complete: () => {
         this.openSnackBar("Changes applied!")

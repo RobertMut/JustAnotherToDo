@@ -30,6 +30,7 @@ export class HomeComponent {
   todoLoaded: boolean = false;
   categoryLoaded: boolean = false;
   color: any;
+  expanded: boolean = false
   constructor(private auth: AuthGuardService,
     private todoService: ToDoService,
     private categoryService: CategoryService,
@@ -46,13 +47,12 @@ export class HomeComponent {
         'categoryId': addForm.categoryId,
       } as ICreateToDoCommand).subscribe({
         error: (e) => {
-          this.auth.canActivate();
-          this.openSnackBar("ERROR! Could not create a new To-Do!")
-          console.error(e);
+          this.auth.check(e)
         },
         complete: () => {
           this.getToDos()
           this.openSnackBar("Created new To-Do!")
+          this.expanded = false;
         }
       })
       
@@ -63,13 +63,12 @@ export class HomeComponent {
         'color': this.color
       }as ICreateCategoryCommand).subscribe({
         error: (e) => {
-          this.auth.canActivate();
-          this.openSnackBar("ERROR! Could not create a new category!")
-          console.error(e);
+          this.auth.check(e)
         },
         complete: () =>{
           this.getCategories();
           this.openSnackBar("Created new category!");
+          this.expanded = false;
         } 
       });
     }
@@ -78,9 +77,7 @@ export class HomeComponent {
         'id': todo.id
       } as IDeleteToDoCommand).subscribe({
         error: (e) => {
-          this.auth.canActivate();
-          this.openSnackBar("ERROR! Try again!");
-          console.error(e);
+          this.auth.check(e)
         },
         complete: () => {
           this.getToDos()
@@ -94,14 +91,13 @@ export class HomeComponent {
         'id': category.id
       } as IDeleteCategoryCommand).subscribe({
         error: (e) => {
-          this.auth.canActivate();
-          this.openSnackBar("ERROR! Try again!");
-          console.error(e);
+          this.auth.check(e)
         },
         complete: () =>{
           this.getCategories();
           this.getToDos();
           this.openSnackBar("Category deleted. Now, you can easily add another!");
+          this.expanded = false;
         } 
       });
       category.deleted = true;
@@ -118,9 +114,7 @@ export class HomeComponent {
           'categoryId': todo.categoryId
         } as IUpdateToDoCommand).subscribe({
           error: (e) => {
-            this.auth.canActivate()
-            this.openSnackBar("ERROR! Try again!")
-            console.error(e)
+            this.auth.check(e)
           },
           complete: () =>{
             this.openSnackBar("Changes applied!")
@@ -140,10 +134,8 @@ export class HomeComponent {
           this.categories = v.categories
           this.categoryLoaded = true;
         },
-        error: (err: any) =>{
-          console.error(err);
-          
-          this.auth.canActivate();
+        error: (err) =>{
+          this.auth.check(err);
           }
         });
     }
@@ -155,8 +147,7 @@ export class HomeComponent {
           this.todoLoaded = true;
         },
         error: (err: any) =>{
-          console.error(err);
-          this.auth.canActivate();
+          this.auth.check(err)
           }
         })
     }

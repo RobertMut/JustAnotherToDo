@@ -4,6 +4,7 @@ using JustAnotherToDo.Application.Common.Interfaces;
 using JustAnotherToDo.Infrastructure;
 using JustAnotherToDo.Infrastructure.Swagger;
 using JustAnotherToDo.Persistence;
+using Serilog;
 using WebUI.Filters;
 using WebUI.Services;
 
@@ -19,6 +20,7 @@ builder.Configuration
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddLogging(c => c.AddSerilog());
 builder.Services.AddHealthChecks().AddDbContextCheck<JustAnotherToDoDbContext>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMvc(opt =>
