@@ -70,7 +70,7 @@
 
       </mat-expansion-panel>
     </th>
-      <td mat-cell *matCellDef="let element" class="card" [style.background]="element.color+'88'" [style.border-color]="element.color+'88'">
+      <td mat-cell *matCellDef="let element" class="card" [style.background]="element.color === null ? '#ffffff' : element.color+'88'" [style.border-color]="element.color === null ? '#e7e7e7' : element.color+'88'">
         <div class="card-body no-padding">
           <div id="column" class="card-title">
             {{element.name}}
@@ -78,11 +78,11 @@
               <mat-label>To-do name</mat-label>
               <input matInput [(ngModel)]="element.name" type="text"/>
             </mat-form-field>
-            <p *ngIf="!element.canEdit">{{element.category}}</p>
+            <p *ngIf="!element.canEdit">{{element.category === null ? "None" : element.category}}</p>
               <mat-form-field *ngIf="element.canEdit">
                 <mat-label>Category</mat-label>
                 <mat-select name="categoryId" class="buttons" [(ngModel)]="element.categoryId">
-                  <mat-option [value]="null"></mat-option>
+                  <mat-option [value]="null" (click)="visualChange(element, null)"></mat-option>
                   <mat-option *ngFor="let category of categories" [value]="category.id" [style.background]="category.color+'88'" [disabled]="category === null" (click)="visualChange(element, category)">{{category.name}}</mat-option>
                 </mat-select>
               </mat-form-field>

@@ -124,9 +124,16 @@ export class HomeComponent {
       }
     }
     visualChange(todo: any, category: any){
+      if(category === null){
+        todo.categoryId = null
+        todo.color = null
+        todo.category = null
+      } else {
         todo.categoryId = category.id
         todo.color = category.color
         todo.category = category.name
+      }
+
     }
     getCategories(){
       this.categoryService.getCategories().subscribe({
